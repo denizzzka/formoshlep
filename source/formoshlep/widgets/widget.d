@@ -4,6 +4,7 @@ import formoshlep: HtmlDocPiece;
 
 interface WebWidget
 {
+    //~ package:
     HtmlDocPiece toHtml() const;
 }
 
