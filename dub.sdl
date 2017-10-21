@@ -1,7 +1,17 @@
 name "formoshlep"
-description "Server-side web framework for rich Internet applications"
+description "Dlangui web backend platform"
 authors "Denis Feklushkin"
 copyright "Copyright © 2017, Denis Feklushkin"
 license "MIT"
 dependency "dlangui" version="~>0.9.169"
+subConfiguration "dlangui" "external"
+versions "EmbedStandardResources" "NO_FREETYPE"
+stringImportPaths "cfg"
 dependency "dhtags" version="~>0.2.0"
+
+subPackage {
+    name "example"
+    sourcePaths "example/source"
+    targetType "executable"
+    dependency "formoshlep" version="*"
+}
