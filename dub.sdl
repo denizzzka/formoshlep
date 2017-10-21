@@ -1,0 +1,7 @@
+name "formoshlep"
+description "Server-side web framework for rich Internet applications"
+authors "Denis Feklushkin"
+copyright "Copyright © 2017, Denis Feklushkin"
+license "MIT"
+dependency "dlangui" version="~>0.9.169"
+dependency "dhtags" version="~>0.2.0"
