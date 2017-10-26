@@ -7,12 +7,12 @@ import std.container : SList;
 
 alias HtmlDocPiece = SList!string;
 
-string toHtmlString(HtmlDocPiece a)
+string toString(HtmlDocPiece a) @property
 {
     string ret;
 
     foreach(s; a)
-        ret ~= s;
+        ret = s ~ ret;
 
     return ret;
 }
