@@ -8,7 +8,6 @@ interface WebWidget
     HtmlDocPiece toHtml() const;
 }
 
-import dhtags;
 static import dlangui.widgets.controls;
 
 class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
@@ -20,11 +19,13 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
 
     HtmlDocPiece toHtml() const
     {
-        //TODO: dlangui's TextWidget.test() should be a const and used here
-
+        import dhtags;
         import std.conv: to;
 
-        return HtmlDocPiece(["<div>", _text.to!string, "</div>"]);
+        //TODO: dlangui's TextWidget.text() should be a const and used here
+        return HtmlDocPiece([
+                h2(_text.to!string).toString
+            ]);
     }
 }
 
