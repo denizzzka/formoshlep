@@ -24,7 +24,7 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
 
         import std.conv: to;
 
-        return HtmlDocPiece([_text.to!string]);
+        return HtmlDocPiece(["<div>", _text.to!string, "</div>"]);
     }
 }
 

@@ -24,7 +24,9 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     mainWidget.addChild(w);
 
     if (req.path == "/")
-        res.writeBody((cast(WebWidget) w).toHtml().empty ? "true" : "false");
+        res.writeBody((cast(WebWidget) w).toHtml.toHtmlString, "text/html; charset=UTF-8");
+    else
+        res.writeBody("Unknown path");
 
     //~ window.show();
 
