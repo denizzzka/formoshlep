@@ -5,7 +5,7 @@ import formoshlep: HtmlDocPiece;
 interface WebWidget
 {
     //~ package:
-    HtmlDocPiece toHtml();
+    HtmlDocPiece toHtml() const;
 }
 
 static import dlangui.widgets.controls;
@@ -57,7 +57,7 @@ static import dlangui.widgets.layouts;
 
 class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {
-    HtmlDocPiece toHtml()
+    HtmlDocPiece toHtml() const
     {
         import std.conv: to;
         import formoshlep: toString;
