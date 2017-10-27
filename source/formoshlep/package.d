@@ -1,5 +1,6 @@
 module formoshlep;
 
+public import formoshlep.platform;
 public import formoshlep.widgets.widget;
 public import dlangui.widgets.widget: Widget;
 

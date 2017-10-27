@@ -3,8 +3,30 @@ module formoshlep.platform;
 import dlangui;
 import dlangui.platforms.common.platform;
 
+private FormoshlepPlatform[size_t] sessions;
+private size_t curr_serial;
+
+FormoshlepPlatform getPlatformBySerial(size_t idx)
+{
+    return sessions[idx];
+}
+
 class FormoshlepPlatform : Platform
 {
+    const size_t serial;
+
+    this()
+    {
+        serial = curr_serial;
+        sessions[serial] = this;
+        curr_serial++;
+    }
+
+    ~this()
+    {
+        sessions.remove(serial);
+    }
+
     override:
 
     Window createWindow(dstring windowCaption, Window parent, uint flags, uint width, uint height)

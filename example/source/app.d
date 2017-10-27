@@ -22,20 +22,25 @@ extern (C) int UIAppMain(string[] args)
 
 void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
 {
-    Session session;
-
-    if (req.session)
-    {
-        session = req.session;
-    }
-    else
-    {
-        session = res.startSession();
-        session.set("username", "some_username");
-        session.set("password", "123");
-    }
-
     import formoshlep;
+
+    // set Platform.instance
+    {
+        enum sess_id = "sess_id";
+
+        if (req.session)
+        {
+            // FIXME: fails after 2 attempt:
+            //~ Platform.setInstance = req.session.get!size_t(sess_id).getPlatformBySerial;
+        }
+        else
+        {
+            Platform.setInstance = new FormoshlepPlatform();
+
+            auto s = res.startSession();
+            s.set(sess_id, cast(size_t) (cast(FormoshlepPlatform) Platform.instance).serial);
+        }
+    }
 
     Window window = Platform.instance.createWindow("My Window", null);
     Widget mainWidget = new VerticalLayout();
