@@ -1,11 +1,14 @@
 module formoshlep.widgets.widget;
 
 import formoshlep: HtmlDocPiece;
+import vibe.http.server: HTTPServerRequest;
 
 interface WebWidget
 {
+    //TODO: enable it:
     //~ package:
     HtmlDocPiece toHtml() const;
+    void readState(HTTPServerRequest req);
 }
 
 static import dlangui.widgets.controls;
@@ -27,6 +30,8 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
                 h2(_text.to!string).toString //TODO: replace h2 to more suitable tag
             ]);
     }
+
+    void readState(in HTTPServerRequest req) {}
 }
 
 static import dlangui.dialogs.inputbox;
@@ -35,6 +40,7 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
 {
     import dlangui.core.i18n: UIString;
     import dlangui: Window;
+    import std.conv: to;
 
     this(UIString caption, UIString message, Window parentWindow, dstring initialText, void delegate(dstring result) handler)
     {
@@ -44,12 +50,16 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
     HtmlDocPiece toHtml() const
     {
         import dhtags;
-        import std.conv: to;
 
         //TODO: dlangui's TextWidget.text() should be a const and used here
         return HtmlDocPiece([
                 input(value=_text.to!string).toString
             ]);
+    }
+
+    void readState(HTTPServerRequest req)
+    {
+        _text = req.form.get(id).to!dstring;
     }
 }
 
@@ -69,4 +79,6 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 
         return ret;
     }
+
+    void readState(in HTTPServerRequest req) {}
 }

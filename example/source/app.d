@@ -28,7 +28,11 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     mainWidget.addChild(inputBox);
 
     if (req.path == "/")
+    {
+        mainWidget.readWidgetsState(req);
+
         res.writeBody((cast(WebWidget) mainWidget).toHtml.toString, "text/html; charset=UTF-8");
+    }
     else
         res.writeBody("Unknown path");
 

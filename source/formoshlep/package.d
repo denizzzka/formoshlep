@@ -16,3 +16,15 @@ string toString(HtmlDocPiece a) @property
 
     return ret;
 }
+
+import vibe.http.server: HTTPServerRequest;
+
+void readWidgetsState(Widget w, HTTPServerRequest req)
+{
+    for(auto i = 0; i < w.childCount; i++)
+    {
+        (cast(WebWidget) w).readState(req);
+
+        w.child(i).readWidgetsState(req);
+    }
+}
