@@ -9,7 +9,9 @@ class FormoshlepPlatform : Platform
 
     Window createWindow(dstring windowCaption, Window parent, uint flags, uint width, uint height)
     {
-        return null;
+        import formoshlep.window;
+
+        return new FormoshlepWindow(windowCaption);
     }
 
     void closeWindow(Window w)

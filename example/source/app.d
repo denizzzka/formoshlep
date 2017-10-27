@@ -19,7 +19,7 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
 {
     import formoshlep;
 
-    //~ Window window = Platform.instance.createWindow("My Window", null);
+    Window window = Platform.instance.createWindow("My Window", null);
     Widget mainWidget = new VerticalLayout();
     Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
