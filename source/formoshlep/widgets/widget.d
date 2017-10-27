@@ -2,6 +2,16 @@ module formoshlep.widgets.widget;
 
 import formoshlep: HtmlDocPiece;
 import vibe.http.server: HTTPServerRequest;
+import std.exception: enforce;
+import std.conv: to;
+import dhtags;
+
+static import dlangui.widgets.controls;
+static import dlangui.dialogs.inputbox;
+static import dlangui.widgets.layouts;
+
+import dlangui.core.i18n: UIString;
+import dlangui: Window;
 
 interface WebWidget
 {
@@ -10,8 +20,6 @@ interface WebWidget
     HtmlDocPiece toHtml() const;
     void readState(HTTPServerRequest req);
 }
-
-static import dlangui.widgets.controls;
 
 class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
 {
@@ -22,7 +30,6 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
 
     HtmlDocPiece toHtml() const
     {
-        import dhtags;
         import std.conv: to;
 
         //TODO: dlangui's TextWidget.text() should be a const and used here
@@ -34,23 +41,16 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     void readState(in HTTPServerRequest req) {}
 }
 
-static import dlangui.dialogs.inputbox;
-
 class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
 {
-    import dlangui.core.i18n: UIString;
-    import dlangui: Window;
-    import std.conv: to;
-
     this(UIString caption, UIString message, Window parentWindow, dstring initialText, void delegate(dstring result) handler)
     {
+        enforce(handler == null);
         super(caption, message, parentWindow, initialText, handler);
     }
 
     HtmlDocPiece toHtml() const
     {
-        import dhtags;
-
         //TODO: dlangui's TextWidget.text() should be a const and used here
         return HtmlDocPiece([
                 input(value=_text.to!string).toString
@@ -63,7 +63,22 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
     }
 }
 
-static import dlangui.widgets.layouts;
+class Button : dlangui.widgets.controls.Button, WebWidget
+{
+    this(string ID, string labelResourceId)
+    {
+        super(ID, labelResourceId);
+    }
+
+    HtmlDocPiece toHtml() const
+    {
+        return HtmlDocPiece([
+                input(type="submit", name=id, value=text.to!string).toString
+            ]);
+    }
+
+    void readState(in HTTPServerRequest req) {}
+}
 
 class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {

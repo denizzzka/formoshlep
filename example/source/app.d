@@ -23,9 +23,11 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     Widget mainWidget = new VerticalLayout();
     Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
+    Widget submitButton = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
 
     mainWidget.addChild(w);
     mainWidget.addChild(inputBox);
+    mainWidget.addChild(submitButton);
 
     if (req.path == "/")
     {
