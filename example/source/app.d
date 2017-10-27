@@ -6,7 +6,12 @@ mixin APP_ENTRY_POINT;
 /// entry point for dlangui based application
 extern (C) int UIAppMain(string[] args)
 {
-    listenHTTP(":8080", &handleRequest);
+    auto settings = new HTTPServerSettings;
+    settings.port = 8080;
+    settings.bindAddresses = ["::1", "127.0.0.1"];
+    settings.sessionStore = new MemorySessionStore;
+
+    listenHTTP(settings, &handleRequest);
 
     import vibe.core.core;
 
@@ -17,6 +22,19 @@ extern (C) int UIAppMain(string[] args)
 
 void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
 {
+    Session session;
+
+    if (req.session)
+    {
+        session = req.session;
+    }
+    else
+    {
+        session = res.startSession();
+        session.set("username", "some_username");
+        session.set("password", "123");
+    }
+
     import formoshlep;
 
     Window window = Platform.instance.createWindow("My Window", null);
