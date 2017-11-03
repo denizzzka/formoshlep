@@ -27,15 +27,38 @@ class FormoshlepWindow : Window
     }
 
     import vibe.http.server: HTTPServerResponse;
+    import formoshlep.widget: WebWidget;
 
     package void genHttpServerResponse(ref HTTPServerResponse res)
     {
-        import formoshlep.widget: WebWidget;
+        import formoshlep: toString;
+
+        res.writeBody(toHtml.toString, "text/html; charset=UTF-8");
+    }
+
+    import formoshlep: HtmlDocPiece;
+
+    private HtmlDocPiece toHtml() const
+    {
+        import dhtags;
         import formoshlep: toString;
 
         assert(mainWidget !is null);
 
-        res.writeBody((cast(WebWidget) mainWidget).toHtml.toString, "text/html; charset=UTF-8");
+        return HtmlDocPiece([
+            html
+            (
+                head
+                (
+                    //~ title(mainWidget.caption)
+                ),
+
+                body_
+                (
+                    (cast(WebWidget) mainWidget).toHtml.toString
+                )
+            ).toString
+        ]);
     }
 
     override:
