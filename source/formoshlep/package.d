@@ -30,4 +30,21 @@ void readWidgetsState(Widget w, HTTPServerRequest req)
     }
 }
 
-//TODO: add processEvents()
+void processEvents(Widget w, HTTPServerRequest req)
+{
+    for(auto i = 0; i < w.childCount; i++)
+    {
+        FormoEvent[] events = (cast(WebWidget) w).getEvents(req);
+
+        foreach(e; events)
+        {
+            if(e.keyEvent !is null)
+                w.onKeyEvent(e.keyEvent);
+
+            if(e.mouseEvent !is null)
+                w.onMouseEvent(e.mouseEvent);
+        }
+
+        w.child(i).processEvents(req);
+    }
+}

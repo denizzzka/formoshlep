@@ -55,6 +55,7 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     if (req.path == "/")
     {
         mainWidget.readWidgetsState(req);
+        mainWidget.processEvents(req);
 
         res.writeBody((cast(WebWidget) mainWidget).toHtml.toString, "text/html; charset=UTF-8");
     }

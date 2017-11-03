@@ -22,10 +22,10 @@ package struct FormoEvent
 
 interface WebWidget
 {
-    HtmlDocPiece toHtml() const; //TODO: make it package:
+    HtmlDocPiece toHtml() const; //TODO: make it package
 
-    void readState(HTTPServerRequest req);
-    package FormoEvent[] getEvents(HTTPServerRequest req);
+    void readState(HTTPServerRequest req); //TODO: make it package
+    FormoEvent[] getEvents(HTTPServerRequest req); //TODO: make it package
 }
 
 class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
