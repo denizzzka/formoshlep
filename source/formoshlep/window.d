@@ -4,10 +4,11 @@ import dlangui;
 
 class FormoshlepWindow : Window
 {
-    private string caption;
+    private dstring caption;
 
     this(dstring caption)
     {
+        this.caption = caption;
         windowOrContentResizeMode = WindowOrContentResizeMode.shrinkWidgets;
         super();
 
@@ -40,24 +41,20 @@ class FormoshlepWindow : Window
 
     private HtmlDocPiece toHtml() const
     {
-        import dhtags;
         import formoshlep: toString;
+        import std.conv: to;
 
         assert(mainWidget !is null);
 
         return HtmlDocPiece([
-            html
-            (
-                head
-                (
-                    //~ title(mainWidget.caption)
-                ),
-
-                body_
-                (
-                    (cast(WebWidget) mainWidget).toHtml.toString
-                )
-            ).toString
+            "
+            <html>
+                <head>
+                    <title>"~windowCaption().to!string~"</title>
+                </head>
+                <body>"~(cast(WebWidget) mainWidget).toHtml.toString~"</body>
+            </html>
+            "
         ]);
     }
 
@@ -71,14 +68,14 @@ class FormoshlepWindow : Window
     /// Displays window at the first time
     void show() {}
 
-    dstring windowCaption() @property
+    dstring windowCaption() const @property
     {
-        return caption.to!dstring;
+        return caption;
     }
 
     void windowCaption(dstring caption) @property
     {
-        this.caption = caption.to!string;
+        this.caption = caption;
     }
 
     void windowIcon(DrawBufRef icon) @property
