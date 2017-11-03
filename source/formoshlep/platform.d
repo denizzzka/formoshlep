@@ -13,6 +13,9 @@ FormoshlepPlatform getPlatformBySerial(size_t idx)
 
 class FormoshlepPlatform : Platform
 {
+    import formoshlep.window: FormoshlepWindow;
+
+    private FormoshlepWindow window;
     const size_t serial;
 
     this()
@@ -27,13 +30,26 @@ class FormoshlepPlatform : Platform
         sessions.remove(serial);
     }
 
+    import vibe.http.server: HTTPServerResponse;
+
+    void genHttpServerResponse(ref HTTPServerResponse res)
+    {
+        assert(window !is null);
+
+        window.genHttpServerResponse(res);
+    }
+
     override:
 
     Window createWindow(dstring windowCaption, Window parent, uint flags, uint width, uint height)
     {
         import formoshlep.window;
 
-        return new FormoshlepWindow(windowCaption);
+        assert(window is null);
+
+        window = new FormoshlepWindow(windowCaption);
+
+        return window;
     }
 
     void closeWindow(Window w)

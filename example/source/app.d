@@ -43,26 +43,26 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     }
 
     Window window = Platform.instance.createWindow("My Window", null);
-    Widget mainWidget = new VerticalLayout();
+    window.mainWidget = new VerticalLayout();
     Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
     Widget submitButton = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
 
-    mainWidget.addChild(w);
-    mainWidget.addChild(inputBox);
-    mainWidget.addChild(submitButton);
+    window.mainWidget.addChild(w);
+    window.mainWidget.addChild(inputBox);
+    window.mainWidget.addChild(submitButton);
 
     if (req.path == "/")
     {
-        mainWidget.readWidgetsState(req);
-        mainWidget.processEvents(req);
+        window.mainWidget.readWidgetsState(req);
+        window.mainWidget.processEvents(req);
 
-        res.writeBody((cast(WebWidget) mainWidget).toHtml.toString, "text/html; charset=UTF-8");
+        (cast(FormoshlepPlatform) Platform.instance).genHttpServerResponse(res);
     }
     else
         res.writeBody("Unknown path");
 
-    //~ window.show();
+    window.show();
 
     if(!req.form.empty)
         Platform.instance.enterMessageLoop();

@@ -26,6 +26,18 @@ class FormoshlepWindow : Window
         close();
     }
 
+    import vibe.http.server: HTTPServerResponse;
+
+    package void genHttpServerResponse(ref HTTPServerResponse res)
+    {
+        import formoshlep.widget: WebWidget;
+        import formoshlep: toString;
+
+        assert(mainWidget !is null);
+
+        res.writeBody((cast(WebWidget) mainWidget).toHtml.toString, "text/html; charset=UTF-8");
+    }
+
     override:
 
     void close()
@@ -34,10 +46,7 @@ class FormoshlepWindow : Window
     }
 
     /// Displays window at the first time
-    void show()
-    {
-        assert(false, __FUNCTION__~" isn't implemented");
-    }
+    void show() {}
 
     dstring windowCaption() @property
     {
@@ -54,7 +63,5 @@ class FormoshlepWindow : Window
         assert(false, __FUNCTION__~" isn't implemented");
     }
 
-    void invalidate()
-    {
-    }
+    void invalidate() {}
 }
