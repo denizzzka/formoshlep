@@ -3,9 +3,13 @@ import dlangui;
 
 mixin APP_ENTRY_POINT;
 
+Window window;
+
 /// entry point for dlangui based application
 extern (C) int UIAppMain(string[] args)
 {
+    window = Platform.instance.createWindow("My Window", null);
+
     auto settings = new HTTPServerSettings;
     settings.port = 8080;
     settings.bindAddresses = ["::1", "127.0.0.1"];
@@ -35,14 +39,13 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
         }
         else
         {
-            Platform.setInstance = new FormoshlepPlatform();
+            //~ Platform.setInstance = new FormoshlepPlatform();
 
-            auto s = res.startSession();
-            s.set(sess_id, cast(size_t) (cast(FormoshlepPlatform) Platform.instance).serial);
+            //~ auto s = res.startSession();
+            //~ s.set(sess_id, cast(size_t) (cast(FormoshlepPlatform) Platform.instance).serial);
         }
     }
 
-    Window window = Platform.instance.createWindow("My Window", null);
     window.mainWidget = new VerticalLayout();
     Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
