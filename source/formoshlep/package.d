@@ -1,7 +1,7 @@
 module formoshlep;
 
 public import formoshlep.platform;
-public import formoshlep.widgets.widget;
+public import formoshlep.widget;
 public import dlangui.widgets.widget: Widget;
 
 import std.container : SList;
@@ -29,3 +29,5 @@ void readWidgetsState(Widget w, HTTPServerRequest req)
         w.child(i).readWidgetsState(req);
     }
 }
+
+//TODO: add processEvents()

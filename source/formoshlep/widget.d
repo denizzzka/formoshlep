@@ -1,4 +1,4 @@
-module formoshlep.widgets.widget;
+module formoshlep.widget;
 
 import formoshlep: HtmlDocPiece;
 import vibe.http.server: HTTPServerRequest;
@@ -12,13 +12,20 @@ static import dlangui.widgets.layouts;
 
 import dlangui.core.i18n: UIString;
 import dlangui: Window;
+import dlangui.core.events;
+
+package struct FormoEvent
+{
+    KeyEvent keyEvent;
+    MouseEvent mouseEvent;
+}
 
 interface WebWidget
 {
-    //TODO: enable it:
-    //~ package:
-    HtmlDocPiece toHtml() const;
+    HtmlDocPiece toHtml() const; //TODO: make it package:
+
     void readState(HTTPServerRequest req);
+    package FormoEvent[] getEvents(HTTPServerRequest req);
 }
 
 class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
@@ -39,6 +46,7 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     }
 
     void readState(in HTTPServerRequest req) {}
+    FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
 }
 
 class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
@@ -61,6 +69,14 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
     {
         _text = req.form.get(id).to!dstring;
     }
+
+    //TODO: Rewrite for JS-enabled widget
+    FormoEvent[] getEvents(HTTPServerRequest req)
+    {
+        enforce(action is null);
+
+        return null;
+    }
 }
 
 class Button : dlangui.widgets.controls.Button, WebWidget
@@ -78,6 +94,20 @@ class Button : dlangui.widgets.controls.Button, WebWidget
     }
 
     void readState(in HTTPServerRequest req) {}
+
+    FormoEvent[] getEvents(HTTPServerRequest req)
+    {
+        if(req.form.get("name").to!string == id)
+        {
+            return
+            [
+                FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
+                FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
+            ];
+        }
+        else
+            return null;
+    }
 }
 
 class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
@@ -96,4 +126,5 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
     }
 
     void readState(in HTTPServerRequest req) {}
+    FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
 }
