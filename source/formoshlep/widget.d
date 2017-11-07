@@ -39,9 +39,8 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     {
         import std.conv: to;
 
-        //TODO: dlangui's TextWidget.text() should be a const and used here
         return HtmlDocPiece([
-                h2(_text.to!string).toString //TODO: replace h2 to more suitable tag
+                h2(text.to!string).toString //TODO: replace h2 to more suitable tag
             ]);
     }
 
