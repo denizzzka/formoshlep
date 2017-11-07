@@ -57,21 +57,17 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
         }
     }
 
-    //~ if(!req.form.empty)
-        //~ Platform.instance.enterMessageLoop();
-
     if (req.path != "/")
         res.writeBody("Unknown path");
     else
     {
-        if(!req.form.empty)
-        {
-            window.mainWidget.readWidgetsState(req);
-            window.mainWidget.processEvents(req);
-        }
+        window.mainWidget.readWidgetsState(req);
+        window.mainWidget.processEvents(req);
 
         (cast(FormoshlepPlatform) Platform.instance).genHttpServerResponse(res);
     }
+
+    //~ Platform.instance.enterMessageLoop();
 
     window.show();
 }

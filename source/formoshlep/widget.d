@@ -59,15 +59,15 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
 
     HtmlDocPiece toHtml() const
     {
-        //TODO: dlangui's TextWidget.text() should be a const and used here
         return HtmlDocPiece([
-                input(type="text", name=id, value=text.to!string).toString
+                input(type="text", name=id, value=_text.to!string).toString //TODO: add text() to dlangui.dialogs.inputbox.InputBox
             ]);
     }
 
     void readState(HTTPServerRequest req)
     {
-        _text = req.form.get(id).to!dstring;
+        if(req.form.get(id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
+            _text = req.form.get(id).to!dstring;
     }
 
     //TODO: Rewrite for JS-enabled widget
@@ -97,16 +97,14 @@ class Button : dlangui.widgets.controls.Button, WebWidget
 
     FormoEvent[] getEvents(HTTPServerRequest req)
     {
-        if(req.form.get("name").to!string == id)
-        {
+        if(req.form.get(id) is null)
+            return null;
+        else
             return
             [
                 FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
                 FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
             ];
-        }
-        else
-            return null;
     }
 }
 
