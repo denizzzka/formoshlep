@@ -8,7 +8,18 @@ Window window;
 /// entry point for dlangui based application
 extern (C) int UIAppMain(string[] args)
 {
+    import formoshlep;
+
     window = Platform.instance.createWindow("My Window", null);
+
+    window.mainWidget = new VerticalLayout();
+    Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
+    Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
+    Widget submitButton = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
+
+    window.mainWidget.addChild(w);
+    window.mainWidget.addChild(inputBox);
+    window.mainWidget.addChild(submitButton);
 
     auto settings = new HTTPServerSettings;
     settings.port = 8080;
@@ -46,27 +57,21 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
         }
     }
 
-    window.mainWidget = new VerticalLayout();
-    Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
-    Widget submitButton = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
+    //~ if(!req.form.empty)
+        //~ Platform.instance.enterMessageLoop();
 
-    window.mainWidget.addChild(w);
-    window.mainWidget.addChild(inputBox);
-    window.mainWidget.addChild(submitButton);
-
-    if (req.path == "/")
+    if (req.path != "/")
+        res.writeBody("Unknown path");
+    else
     {
-        window.mainWidget.readWidgetsState(req);
-        window.mainWidget.processEvents(req);
+        if(!req.form.empty)
+        {
+            window.mainWidget.readWidgetsState(req);
+            window.mainWidget.processEvents(req);
+        }
 
         (cast(FormoshlepPlatform) Platform.instance).genHttpServerResponse(res);
     }
-    else
-        res.writeBody("Unknown path");
 
     window.show();
-
-    if(!req.form.empty)
-        Platform.instance.enterMessageLoop();
 }

@@ -61,7 +61,7 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
     {
         //TODO: dlangui's TextWidget.text() should be a const and used here
         return HtmlDocPiece([
-                input(value=_text.to!string).toString
+                input(type="text", name=id, value=_text.to!string).toString
             ]);
     }
 
