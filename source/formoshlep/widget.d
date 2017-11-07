@@ -39,9 +39,7 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     {
         import std.conv: to;
 
-        return HtmlDocPiece([
-                h2(text.to!string).toString //TODO: replace h2 to more suitable tag
-            ]);
+        return h2(text.to!string); //TODO: replace h2 to more suitable tag
     }
 
     void readState(in HTTPServerRequest req) {}
@@ -58,9 +56,7 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
 
     HtmlDocPiece toHtml() const
     {
-        return HtmlDocPiece([
-                input(type="text", name=id, value=_text.to!string).toString //TODO: add text() to dlangui.dialogs.inputbox.InputBox
-            ]);
+        return input(type="text", name=id, value=_text.to!string); //TODO: add text() to dlangui.dialogs.inputbox.InputBox
     }
 
     void readState(HTTPServerRequest req)
@@ -87,9 +83,7 @@ class Button : dlangui.widgets.controls.Button, WebWidget
 
     HtmlDocPiece toHtml() const
     {
-        return HtmlDocPiece([
-                input(type="submit", name=id, value=text.to!string).toString
-            ]);
+        return input(type="submit", name=id, value=text.to!string);
     }
 
     void readState(in HTTPServerRequest req) {}
@@ -111,13 +105,12 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {
     HtmlDocPiece toHtml() const
     {
-        import std.conv: to;
-        import formoshlep: toString;
+        import dhtags.tags.tag: HtmlTag;
 
-        HtmlDocPiece ret = ["<!-- VerticalLayout -->"];
+        auto ret = new HtmlTag;
 
         for(auto i = 0; i < childCount; i++)
-            ret.insertFront((cast(WebWidget) child(i)).toHtml.toString);
+            ret.children ~= (cast(WebWidget) child(i)).toHtml;
 
         return ret;
     }

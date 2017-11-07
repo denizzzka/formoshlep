@@ -32,8 +32,6 @@ class FormoshlepWindow : Window
 
     package void genHttpServerResponse(ref HTTPServerResponse res)
     {
-        import formoshlep: toString;
-
         res.writeBody(toHtml.toString, "text/html; charset=UTF-8");
     }
 
@@ -41,25 +39,30 @@ class FormoshlepWindow : Window
 
     private HtmlDocPiece toHtml() const
     {
-        import formoshlep: toString;
+        import dhtags;
         import std.conv: to;
 
         assert(mainWidget !is null);
 
-        return HtmlDocPiece([
-            "
-            <html>
-                <head>
-                    <title>"~windowCaption().to!string~"</title>
-                </head>
-                <body>
-                    <form enctype='application/x-www-form-urlencoded' action='./' method='post'>
-                        "~(cast(WebWidget) mainWidget).toHtml.toString~"
-                    </form>
-                </body>
-            </html>
-            "
-        ]);
+        return
+            html
+            (
+                head
+                (
+                    tags.title
+                    (
+                        windowCaption().to!string
+                    )
+                ),
+
+                body_
+                (
+                    tags.form(enctype="application/x-www-form-urlencoded", action=".", method="post")
+                    (
+                        (cast(WebWidget) mainWidget).toHtml.toString
+                    )
+                )
+            );
     }
 
     override:
