@@ -44,7 +44,7 @@ class FormoshlepPlatform : Platform
             assert(req !is null);
             assert(res !is null);
 
-            import formoshlep;
+            import formoshlep.widget;
 
             window.mainWidget.readWidgetsState(req);
             window.mainWidget.processEvents(req);
