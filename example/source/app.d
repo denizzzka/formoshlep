@@ -39,7 +39,8 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
 {
     import formoshlep;
 
-    // set Platform.instance
+    (cast(FormoshlepPlatform) Platform.instance).setServerInputOutput(req, res);
+
     {
         enum sess_id = "sess_id";
 
@@ -64,10 +65,12 @@ void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
         window.mainWidget.readWidgetsState(req);
         window.mainWidget.processEvents(req);
 
-        (cast(FormoshlepPlatform) Platform.instance).genHttpServerResponse(res);
+        (cast(FormoshlepPlatform) Platform.instance).genHttpServerResponse();
     }
 
     //~ Platform.instance.enterMessageLoop();
 
     window.show();
+
+    (cast(FormoshlepPlatform) Platform.instance).resetServerInputOutput();
 }

@@ -18,6 +18,11 @@ class FormoshlepPlatform : Platform
     private FormoshlepWindow window;
     const size_t serial;
 
+    import vibe.http.server: HTTPServerRequest, HTTPServerResponse;
+
+    private const(HTTPServerRequest)* req;
+    private HTTPServerResponse res;
+
     this()
     {
         serial = curr_serial;
@@ -30,11 +35,22 @@ class FormoshlepPlatform : Platform
         sessions.remove(serial);
     }
 
-    import vibe.http.server: HTTPServerResponse;
+    void setServerInputOutput(const HTTPServerRequest req, ref HTTPServerResponse res)
+    {
+        this.req = &req;
+        this.res = res;
+    }
 
-    void genHttpServerResponse(ref HTTPServerResponse res)
+    void resetServerInputOutput()
+    {
+        req = null;
+        res = null;
+    }
+
+    void genHttpServerResponse()
     {
         assert(window !is null);
+        assert(res !is null);
 
         window.genHttpServerResponse(res);
     }
