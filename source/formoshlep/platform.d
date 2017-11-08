@@ -101,7 +101,13 @@ class FormoshlepPlatform : Platform
     */
     int enterMessageLoop()
     {
-        assert(false, "Isn't implemented");
+        import vibe.http.server;
+        import vibe.core.core;
+
+        listenHTTP(_httpServerSettings, &handleRequest);
+        runApplication();
+
+        return 0;
     }
 
     bool hasClipboardText(bool mouseBuffer)

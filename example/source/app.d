@@ -28,18 +28,7 @@ extern (C) int UIAppMain(string[] args)
 
     (cast(FormoshlepPlatform) Platform.instance).httpServerSettings = settings;
 
-    listenHTTP(settings, &(cast(FormoshlepPlatform) Platform.instance).handleRequest);
-
-    import vibe.core.core;
-
-    runApplication();
-
-    return 0;
-}
-
-void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
-{
     window.show();
 
-    Platform.instance.enterMessageLoop();
+    return Platform.instance.enterMessageLoop();
 }
