@@ -26,7 +26,7 @@ extern (C) int UIAppMain(string[] args)
     settings.bindAddresses = ["::1", "127.0.0.1"];
     settings.sessionStore = new MemorySessionStore;
 
-    listenHTTP(settings, &handleRequest);
+    listenHTTP(settings, &(cast(FormoshlepPlatform) Platform.instance).handleRequest);
 
     import vibe.core.core;
 
@@ -37,40 +37,7 @@ extern (C) int UIAppMain(string[] args)
 
 void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
 {
-    import formoshlep;
-
-    (cast(FormoshlepPlatform) Platform.instance).setServerInputOutput(req, res);
-
-    {
-        enum sess_id = "sess_id";
-
-        if (req.session)
-        {
-            // FIXME: fails after 2 attempt:
-            //~ Platform.setInstance = req.session.get!size_t(sess_id).getPlatformBySerial;
-        }
-        else
-        {
-            //~ Platform.setInstance = new FormoshlepPlatform();
-
-            //~ auto s = res.startSession();
-            //~ s.set(sess_id, cast(size_t) (cast(FormoshlepPlatform) Platform.instance).serial);
-        }
-    }
-
-    if (req.path != "/")
-        res.writeBody("Unknown path");
-    else
-    {
-        window.mainWidget.readWidgetsState(req);
-        window.mainWidget.processEvents(req);
-
-        (cast(FormoshlepPlatform) Platform.instance).genHttpServerResponse();
-    }
-
-    //~ Platform.instance.enterMessageLoop();
-
     window.show();
 
-    (cast(FormoshlepPlatform) Platform.instance).resetServerInputOutput();
+    Platform.instance.enterMessageLoop();
 }
