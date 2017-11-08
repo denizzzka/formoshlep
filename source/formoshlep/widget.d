@@ -59,14 +59,14 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
     HtmlDocPiece toHtml() const
     {
         return HtmlDocPiece([
-                input(type="text", name=id, value=_text.to!string).toString //TODO: add text() to dlangui.dialogs.inputbox.InputBox
+                input(type="text", name=id, value=text.to!string).toString
             ]);
     }
 
     void readState(HTTPServerRequest req)
     {
         if(req.form.get(id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
-            _text = req.form.get(id).to!dstring;
+            text = req.form.get(id).to!dstring;
     }
 
     //TODO: Rewrite for JS-enabled widget
