@@ -3,39 +3,17 @@ module formoshlep.platform;
 import dlangui;
 import dlangui.platforms.common.platform;
 
-private FormoshlepPlatform[size_t] sessions;
-private size_t curr_serial;
-
-FormoshlepPlatform getPlatformBySerial(size_t idx)
-{
-    return sessions[idx];
-}
-
 class FormoshlepPlatform : Platform
 {
-    import formoshlep.window: FormoshlepWindow;
+    import formoshlep.window;
+    import vibe.http.server;
 
     private FormoshlepWindow window;
-    const size_t serial;
 
-    import vibe.http.server: HTTPServerSettings;
     private HTTPServerSettings _httpServerSettings;
 
-    import vibe.http.server: HTTPServerRequest, HTTPServerResponse;
     private const(HTTPServerRequest)* req; //TODO: remove it
     private HTTPServerResponse res; //TODO: remove it
-
-    this()
-    {
-        serial = curr_serial;
-        sessions[serial] = this;
-        curr_serial++;
-    }
-
-    ~this()
-    {
-        sessions.remove(serial);
-    }
 
     void httpServerSettings(HTTPServerSettings s)
     {
@@ -80,8 +58,6 @@ class FormoshlepPlatform : Platform
 
     Window createWindow(dstring windowCaption, Window parent, uint flags, uint width, uint height)
     {
-        import formoshlep.window;
-
         assert(window is null);
 
         window = new FormoshlepWindow(windowCaption);
@@ -101,8 +77,7 @@ class FormoshlepPlatform : Platform
     */
     int enterMessageLoop()
     {
-        import vibe.http.server;
-        import vibe.core.core;
+        import vibe.core.core: runApplication;
 
         listenHTTP(_httpServerSettings, &handleRequest);
         runApplication();
