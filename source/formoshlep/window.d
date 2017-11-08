@@ -53,7 +53,7 @@ class FormoshlepWindow : Window
                     <title>"~windowCaption().to!string~"</title>
                 </head>
                 <body>
-                    <form enctype='application/x-www-form-urlencoded' action='./' method='post'>
+                    <form enctype='multipart/form-data' action='./' method='post'>
                         "~(cast(WebWidget) mainWidget).toHtml.toString~"
                     </form>
                 </body>
