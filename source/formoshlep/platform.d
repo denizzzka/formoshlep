@@ -18,8 +18,10 @@ class FormoshlepPlatform : Platform
     private FormoshlepWindow window;
     const size_t serial;
 
-    import vibe.http.server: HTTPServerRequest, HTTPServerResponse;
+    import vibe.http.server: HTTPServerSettings;
+    private HTTPServerSettings _httpServerSettings;
 
+    import vibe.http.server: HTTPServerRequest, HTTPServerResponse;
     private const(HTTPServerRequest)* req; //TODO: remove it
     private HTTPServerResponse res; //TODO: remove it
 
@@ -33,6 +35,11 @@ class FormoshlepPlatform : Platform
     ~this()
     {
         sessions.remove(serial);
+    }
+
+    void httpServerSettings(HTTPServerSettings s)
+    {
+        _httpServerSettings = s;
     }
 
     void setServerInputOutput(const HTTPServerRequest req, ref HTTPServerResponse res)

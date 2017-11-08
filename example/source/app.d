@@ -26,6 +26,8 @@ extern (C) int UIAppMain(string[] args)
     settings.bindAddresses = ["::1", "127.0.0.1"];
     settings.sessionStore = new MemorySessionStore;
 
+    (cast(FormoshlepPlatform) Platform.instance).httpServerSettings = settings;
+
     listenHTTP(settings, &(cast(FormoshlepPlatform) Platform.instance).handleRequest);
 
     import vibe.core.core;
