@@ -57,6 +57,8 @@ class FormoshlepPlatform : Platform
     {
         import vibe.core.core: runApplication;
 
+        assert(_httpServerSettings !is null);
+
         listenHTTP(_httpServerSettings, &handleRequest);
         runApplication();
 
