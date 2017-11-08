@@ -9,40 +9,20 @@ class FormoshlepPlatform : Platform
     import vibe.http.server;
 
     private FormoshlepWindow window;
-
     private HTTPServerSettings _httpServerSettings;
-
-    private const(HTTPServerRequest)* req; //TODO: remove it
-    private HTTPServerResponse res; //TODO: remove it
 
     void httpServerSettings(HTTPServerSettings s)
     {
         _httpServerSettings = s;
     }
 
-    void setServerInputOutput(const HTTPServerRequest req, ref HTTPServerResponse res)
-    {
-        this.req = &req;
-        this.res = res;
-    }
-
-    void resetServerInputOutput()
-    {
-        req = null;
-        res = null;
-    }
-
     void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     {
-        setServerInputOutput(req, res);
-
         //~ if (req.path != "/")
             //~ res.writeBody("Unknown path");
         //~ else
         {
             assert(window !is null);
-            assert(req !is null);
-            assert(res !is null);
 
             import formoshlep.widget;
 
@@ -50,8 +30,6 @@ class FormoshlepPlatform : Platform
             window.mainWidget.processEvents(req);
             window.genHttpServerResponse(res);
         }
-
-        resetServerInputOutput();
     }
 
     override:
