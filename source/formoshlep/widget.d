@@ -1,6 +1,6 @@
 module formoshlep.widget;
 
-import formoshlep: HtmlDocPiece;
+import dhtags.tags.tag: HtmlFragment;
 import vibe.http.server: HTTPServerRequest;
 import std.exception: enforce;
 import std.conv: to;
@@ -22,7 +22,7 @@ package struct FormoEvent
 
 interface WebWidget
 {
-    HtmlDocPiece toHtml() const; //TODO: make it package
+    HtmlFragment toHtml() const; //TODO: make it package
 
     void readState(HTTPServerRequest req); //TODO: make it package
     FormoEvent[] getEvents(HTTPServerRequest req); //TODO: make it package
@@ -35,7 +35,7 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
         super(ID, text);
     }
 
-    HtmlDocPiece toHtml() const
+    HtmlFragment toHtml() const
     {
         import std.conv: to;
 
@@ -54,7 +54,7 @@ class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
         super(caption, message, parentWindow, initialText, handler);
     }
 
-    HtmlDocPiece toHtml() const
+    HtmlFragment toHtml() const
     {
         return input(type="text", name=id, value=text.to!string);
     }
@@ -81,7 +81,7 @@ class Button : dlangui.widgets.controls.Button, WebWidget
         super(ID, labelResourceId);
     }
 
-    HtmlDocPiece toHtml() const
+    HtmlFragment toHtml() const
     {
         return input(type="submit", name=id, value=text.to!string);
     }
@@ -103,7 +103,7 @@ class Button : dlangui.widgets.controls.Button, WebWidget
 
 class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {
-    HtmlDocPiece toHtml() const
+    HtmlFragment toHtml() const
     {
         import dhtags.tags.tag: HtmlString;
 

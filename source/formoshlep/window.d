@@ -35,9 +35,9 @@ class FormoshlepWindow : Window
         res.writeBody(toHtml.toString(false), "text/html; charset=UTF-8");
     }
 
-    import formoshlep: HtmlDocPiece;
+    import dhtags.tags.tag: HtmlFragment, HtmlString;
 
-    private HtmlDocPiece toHtml() const
+    private HtmlFragment toHtml() const
     {
         import dhtags;
         import std.conv: to;
