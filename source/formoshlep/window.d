@@ -32,7 +32,7 @@ class FormoshlepWindow : Window
 
     package void genHttpServerResponse(ref HTTPServerResponse res)
     {
-        res.writeBody(toHtml.toString, "text/html; charset=UTF-8");
+        res.writeBody(toHtml.toString(false), "text/html; charset=UTF-8");
     }
 
     import formoshlep: HtmlDocPiece;
@@ -59,7 +59,7 @@ class FormoshlepWindow : Window
                 (
                     tags.form(enctype="application/x-www-form-urlencoded", action=".", method="post")
                     (
-                        (cast(WebWidget) mainWidget).toHtml.toString
+                        (cast(WebWidget) mainWidget).toHtml.toString(false)
                     )
                 )
             );

@@ -105,14 +105,14 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {
     HtmlDocPiece toHtml() const
     {
-        import dhtags.tags.tag: HtmlTag;
+        import dhtags.tags.tag: HtmlString;
 
-        auto ret = new HtmlTag;
+        string ret;
 
         for(auto i = 0; i < childCount; i++)
-            ret.children ~= (cast(WebWidget) child(i)).toHtml;
+            ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
 
-        return ret;
+        return new HtmlString(ret);
     }
 
     void readState(in HTTPServerRequest req) {}
