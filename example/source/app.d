@@ -53,7 +53,7 @@ extern (C) int UIAppMain(string[] args)
     btn0.click =
         delegate(Widget w)
         {
-            log_text.text = log_text.text ~ log_line_input.text ~ "<br>";
+            log_text.text = log_text.text ~ log_line_input.text ~ ' ';
             return true;
         };
 
