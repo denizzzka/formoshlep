@@ -17,6 +17,18 @@ subPackage {
     configuration "dflt" {
 		dependency "formoshlep" version="*"
     }
+
+    # FIXME: isn't callable dut to DUB bug?
+    configuration "desktop" {
+		dependency "dlangui" version="*"
+		subConfiguration "dlangui" "default"
+    }
+}
+
+subPackage {
+    name "example-desktop"
+    sourcePaths "example/source"
+    targetType "executable"
     configuration "desktop" {
 		dependency "dlangui" version="*"
 		subConfiguration "dlangui" "default"
