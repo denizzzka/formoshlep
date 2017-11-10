@@ -5,7 +5,7 @@ mixin APP_ENTRY_POINT;
 /// entry point for dlangui based application
 extern (C) int UIAppMain(string[] args)
 {
-    version(FORMOSHLEP)
+    version(Formoshlep)
     {
         import formoshlep;
     }
@@ -44,7 +44,7 @@ extern (C) int UIAppMain(string[] args)
     vl3.addChild = new TextWidget("SOME_TEXT", "This is text too"d);
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
 
-    version(FORMOSHLEP)
+    version(Formoshlep)
     {
         import vibe.http.server: HTTPServerSettings;
         auto settings = new HTTPServerSettings;
