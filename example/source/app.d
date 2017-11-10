@@ -12,15 +12,15 @@ extern (C) int UIAppMain(string[] args)
 
     Window window = Platform.instance.createWindow("My Window", null);
 
-    window.mainWidget = new HorizontalLayout();
-    auto vl1 = new VerticalLayout();
-    auto vl2 = new VerticalLayout();
-    auto vl3 = new VerticalLayout();
+    window.mainWidget = new VerticalLayout();
+    auto vl1 = new HorizontalLayout();
+    auto vl2 = new HorizontalLayout();
+    auto vl3 = new HorizontalLayout();
     window.mainWidget.addChild = vl1;
     window.mainWidget.addChild = vl2;
     window.mainWidget.addChild = vl3;
-    auto hl1 = new HorizontalLayout();
-    auto hl2 = new HorizontalLayout();
+    auto hl1 = new VerticalLayout();
+    auto hl2 = new VerticalLayout();
     vl2.addChild = hl1;
     vl2.addChild = hl2;
 

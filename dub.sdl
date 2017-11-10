@@ -14,5 +14,12 @@ subPackage {
     name "example"
     sourcePaths "example/source"
     targetType "executable"
-    dependency "formoshlep" version="*"
+    #configuration "dflt" {
+	#	dependency "formoshlep" version="*"
+	#	versions "FORMOSHLEP"
+    #}
+    configuration "desktop" {
+		dependency "dlangui" version="*"
+		subConfiguration "dlangui" "default"
+    }
 }

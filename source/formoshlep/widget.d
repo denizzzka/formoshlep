@@ -100,7 +100,7 @@ class Button : dlangui.widgets.controls.Button, WebWidget
     }
 }
 
-class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
+class HorizontalLayout : dlangui.widgets.layouts.HorizontalLayout, WebWidget
 {
     HtmlFragment toHtml() const
     {
@@ -116,7 +116,7 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
     FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
 }
 
-class HorizontalLayout : dlangui.widgets.layouts.HorizontalLayout, WebWidget
+class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {
     HtmlFragment toHtml() const
     {
