@@ -124,7 +124,7 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 
         for(auto i = 0; i < childCount; i++)
             ret ~=
-                div
+                div(attrs.style="clear: both")
                 (
                     (cast(WebWidget) child(i)).toHtml
                 ).toString(false);
