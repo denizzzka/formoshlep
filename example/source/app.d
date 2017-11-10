@@ -5,7 +5,10 @@ mixin APP_ENTRY_POINT;
 /// entry point for dlangui based application
 extern (C) int UIAppMain(string[] args)
 {
-    import formoshlep;
+    version(FORMOSHLEP)
+    {
+        import formoshlep;
+    }
 
     Window window = Platform.instance.createWindow("My Window", null);
 
@@ -41,12 +44,15 @@ extern (C) int UIAppMain(string[] args)
     vl3.addChild = new TextWidget("SOME_TEXT", "This is text too"d);
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
 
-    import vibe.http.server: HTTPServerSettings;
-    auto settings = new HTTPServerSettings;
-    settings.port = 8080;
-    settings.bindAddresses = ["::1", "127.0.0.1"];
+    version(FORMOSHLEP)
+    {
+        import vibe.http.server: HTTPServerSettings;
+        auto settings = new HTTPServerSettings;
+        settings.port = 8080;
+        settings.bindAddresses = ["::1", "127.0.0.1"];
 
-    (cast(FormoshlepPlatform) Platform.instance).httpServerSettings = settings;
+        (cast(FormoshlepPlatform) Platform.instance).httpServerSettings = settings;
+    }
 
     window.show();
 
