@@ -39,7 +39,7 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     {
         import std.conv: to;
 
-        return h2(text.to!string); //TODO: replace h2 to more suitable tag
+        return div(attrs.style="width: auto; float: left;")(text.to!string);
     }
 
     void readState(in HTTPServerRequest req) {}
@@ -105,14 +105,12 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
 {
     HtmlFragment toHtml() const
     {
-        import dhtags.tags.tag: HtmlString;
-
         string ret;
 
         for(auto i = 0; i < childCount; i++)
             ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
 
-        return new HtmlString(ret);
+        return div(attrs.style="width: auto; float: left;")(ret);
     }
 
     void readState(in HTTPServerRequest req) {}
