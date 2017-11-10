@@ -100,36 +100,77 @@ class Button : dlangui.widgets.controls.Button, WebWidget
     }
 }
 
-class HorizontalLayout : dlangui.widgets.layouts.HorizontalLayout, WebWidget
+import dlangui.widgets.widget: Orientation;
+
+/// Arranges children vertically
+class VerticalLayout : LinearLayout
 {
-    HtmlFragment toHtml() const
+    /// empty parameter list constructor - for usage by factory
+    this()
     {
-        string ret;
-
-        for(auto i = 0; i < childCount; i++)
-            ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
-
-        return div(attrs.style="width: auto; float: left")(ret);
+        this(null);
     }
-
-    void readState(in HTTPServerRequest req) {}
-    FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
+    /// create with ID parameter
+    this(string ID)
+    {
+        super(ID);
+        orientation = Orientation.Vertical;
+    }
 }
 
-class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
+/// Arranges children horizontally
+class HorizontalLayout : LinearLayout
 {
+    /// empty parameter list constructor - for usage by factory
+    this()
+    {
+        this(null);
+    }
+    /// create with ID parameter
+    this(string ID)
+    {
+        super(ID);
+        orientation = Orientation.Horizontal;
+    }
+}
+
+class LinearLayout : dlangui.widgets.layouts.LinearLayout, WebWidget
+{
+    this()
+    {
+        this(null);
+    }
+
+    /// create with ID parameter and orientation
+    this(string ID, Orientation orientation = Orientation.Vertical)
+    {
+        super(ID, orientation);
+    }
+
     HtmlFragment toHtml() const
     {
-        string ret;
+        final switch(_orientation) // TODO: make dlangui's orintation() const
+        {
+            case Orientation.Horizontal:
+                string ret;
 
-        for(auto i = 0; i < childCount; i++)
-            ret ~=
-                div(attrs.style="clear: both")
-                (
-                    (cast(WebWidget) child(i)).toHtml
-                ).toString(false);
+                for(auto i = 0; i < childCount; i++)
+                    ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
 
-        return div(attrs.style="float: left")(ret);
+                return div(attrs.style="width: auto; float: left")(ret);
+
+            case Orientation.Vertical:
+                string ret;
+
+                for(auto i = 0; i < childCount; i++)
+                    ret ~=
+                        div(attrs.style="clear: both")
+                        (
+                            (cast(WebWidget) child(i)).toHtml
+                        ).toString(false);
+
+                return div(attrs.style="float: left")(ret);
+        }
     }
 
     void readState(in HTTPServerRequest req) {}
