@@ -39,7 +39,8 @@ extern (C) int UIAppMain(string[] args)
     vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 6"d);
 
     hl1.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    hl1.addChild = new EditLine("INPUT_1", "initial text 1"d);
+    auto log_line_input = new EditLine("INPUT_1", "input log record here"d);
+    hl1.addChild = log_line_input;
     hl1.addChild = new Button("BUTTON_SUBMIT_0", "BUTTON_RESOURCE_ID_0");
 
     hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
@@ -47,9 +48,18 @@ extern (C) int UIAppMain(string[] args)
     hl2.addChild = new EditLine("INPUT_2", "initial text 2"d);
     hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
 
-    vl3.addChild = new Button("SOME_BUTTON_0", "Some button 0");
-    vl3.addChild = new TextWidget("SOME_TEXT", "This is text too"d);
+    auto log_text = new TextWidget("SOME_TEXT", "This is text too"d);
+    auto btn0 = new Button("SOME_BUTTON_0", "Press for add log line");
+    btn0.click =
+        delegate(Widget w)
+        {
+            log_text.text = log_text.text ~ log_line_input.text ~ "<br>";
+            return true;
+        };
+
+    vl3.addChild = btn0;
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
+    window.mainWidget.addChild = log_text;
 
     window.show();
 
