@@ -109,7 +109,7 @@ class HorizontalLayout : dlangui.widgets.layouts.HorizontalLayout, WebWidget
         for(auto i = 0; i < childCount; i++)
             ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
 
-        return div(attrs.style="width: auto; float: left;")(ret);
+        return div(attrs.style="width: auto; float: left")(ret);
     }
 
     void readState(in HTTPServerRequest req) {}
@@ -129,7 +129,7 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
                     (cast(WebWidget) child(i)).toHtml
                 ).toString(false);
 
-        return div(attrs.style="float: left;")(ret);
+        return div(attrs.style="float: left")(ret);
     }
 
     void readState(in HTTPServerRequest req) {}
