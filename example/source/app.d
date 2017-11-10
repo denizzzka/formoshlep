@@ -8,6 +8,13 @@ extern (C) int UIAppMain(string[] args)
     version(Formoshlep)
     {
         import formoshlep;
+        import vibe.http.server: HTTPServerSettings;
+
+        auto settings = new HTTPServerSettings;
+        settings.port = 8080;
+        settings.bindAddresses = ["::1", "127.0.0.1"];
+
+        (cast(FormoshlepPlatform) Platform.instance).httpServerSettings = settings;
     }
 
     Window window = Platform.instance.createWindow("My Window", null);
@@ -43,16 +50,6 @@ extern (C) int UIAppMain(string[] args)
     vl3.addChild = new Button("SOME_BUTTON_0", "Some button 0");
     vl3.addChild = new TextWidget("SOME_TEXT", "This is text too"d);
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
-
-    version(Formoshlep)
-    {
-        import vibe.http.server: HTTPServerSettings;
-        auto settings = new HTTPServerSettings;
-        settings.port = 8080;
-        settings.bindAddresses = ["::1", "127.0.0.1"];
-
-        (cast(FormoshlepPlatform) Platform.instance).httpServerSettings = settings;
-    }
 
     window.show();
 
