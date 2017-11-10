@@ -131,7 +131,7 @@ class HorizontalLayout : dlangui.widgets.layouts.HorizontalLayout, WebWidget
                     (cast(WebWidget) child(i)).toHtml
                 ).toString(false);
 
-        return div(ret);
+        return div(attrs.style="float: left;")(ret);
     }
 
     void readState(in HTTPServerRequest req) {}

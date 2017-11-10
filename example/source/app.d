@@ -9,14 +9,20 @@ extern (C) int UIAppMain(string[] args)
 
     Window window = Platform.instance.createWindow("My Window", null);
 
-    window.mainWidget = new HorizontalLayout();
-    Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
-    Widget submitButton = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
+    window.mainWidget = new VerticalLayout();
+    auto hl1 = new HorizontalLayout();
+    auto hl2 = new HorizontalLayout();
+    window.mainWidget.addChild = hl1;
+    window.mainWidget.addChild = hl2;
 
-    window.mainWidget.addChild(w);
-    window.mainWidget.addChild(inputBox);
-    window.mainWidget.addChild(submitButton);
+    hl1.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
+    hl1.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
+    //~ hl1.addChild = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
+
+    hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
+    hl2.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
+    //~ hl2.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
+    //~ hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
 
     import vibe.http.server: HTTPServerSettings;
     auto settings = new HTTPServerSettings;
