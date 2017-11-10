@@ -9,7 +9,7 @@ extern (C) int UIAppMain(string[] args)
 
     Window window = Platform.instance.createWindow("My Window", null);
 
-    window.mainWidget = new VerticalLayout();
+    window.mainWidget = new HorizontalLayout();
     Widget w = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     Widget inputBox = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
     Widget submitButton = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");

@@ -37,9 +37,10 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
 
     HtmlFragment toHtml() const
     {
+        import dhtags.tags.tag: HtmlString;
         import std.conv: to;
 
-        return div(attrs.style="width: auto; float: left;")(text.to!string);
+        return new HtmlString(text.to!string);
     }
 
     void readState(in HTTPServerRequest req) {}
@@ -111,6 +112,26 @@ class VerticalLayout : dlangui.widgets.layouts.VerticalLayout, WebWidget
             ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
 
         return div(attrs.style="width: auto; float: left;")(ret);
+    }
+
+    void readState(in HTTPServerRequest req) {}
+    FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
+}
+
+class HorizontalLayout : dlangui.widgets.layouts.HorizontalLayout, WebWidget
+{
+    HtmlFragment toHtml() const
+    {
+        string ret;
+
+        for(auto i = 0; i < childCount; i++)
+            ret ~=
+                div
+                (
+                    (cast(WebWidget) child(i)).toHtml
+                ).toString(false);
+
+        return div(ret);
     }
 
     void readState(in HTTPServerRequest req) {}
