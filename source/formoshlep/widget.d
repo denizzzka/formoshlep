@@ -7,7 +7,6 @@ import std.conv: to;
 import dhtags;
 
 static import dlangui.widgets.controls;
-static import dlangui.dialogs.inputbox;
 static import dlangui.widgets.layouts;
 
 import dlangui.core.i18n: UIString;
@@ -47,12 +46,11 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
 }
 
-class InputBox : dlangui.dialogs.inputbox.InputBox, WebWidget
+class EditLine : dlangui.widgets.editors.EditLine, WebWidget
 {
-    this(UIString caption, UIString message, Window parentWindow, dstring initialText, void delegate(dstring result) handler)
+    this(string ID, dstring initialContent = null)
     {
-        enforce(handler == null);
-        super(caption, message, parentWindow, initialText, handler);
+        super(ID, initialContent);
     }
 
     HtmlFragment toHtml() const

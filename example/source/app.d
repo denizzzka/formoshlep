@@ -29,12 +29,12 @@ extern (C) int UIAppMain(string[] args)
     vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 6"d);
 
     hl1.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    hl1.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text 1"d, /*handler*/ null);
+    hl1.addChild = new EditLine("INPUT_1", "initial text 1"d);
     hl1.addChild = new Button("BUTTON_SUBMIT_0", "BUTTON_RESOURCE_ID_0");
 
     hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
     hl2.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    hl2.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text 2"d, /*handler*/ null);
+    hl2.addChild = new EditLine("INPUT_2", "initial text 2"d);
     hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
 
     vl3.addChild = new Button("SOME_BUTTON_0", "Some button 0");

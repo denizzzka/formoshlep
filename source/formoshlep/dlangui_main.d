@@ -5,12 +5,13 @@ import dlangui;
 extern(C) int DLANGUImain(string[] args)
 {
     import formoshlep.platform: FormoshlepPlatform;
+    import formoshlep.fonts: FormoshlepFontManager;
 
     initLogs();
     Log.setLogLevel = LogLevel.Debug;
     SCREEN_DPI = 10; // TODO: wtf?
     Platform.setInstance = new FormoshlepPlatform();
-    //~ FontManager.instance = new FormoshlepFontManager();
+    FontManager.instance = new FormoshlepFontManager();
     initResourceManagers();
 
     version (Windows)
