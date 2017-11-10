@@ -9,20 +9,37 @@ extern (C) int UIAppMain(string[] args)
 
     Window window = Platform.instance.createWindow("My Window", null);
 
-    window.mainWidget = new VerticalLayout();
+    window.mainWidget = new HorizontalLayout();
+    auto vl1 = new VerticalLayout();
+    auto vl2 = new VerticalLayout();
+    auto vl3 = new VerticalLayout();
+    window.mainWidget.addChild = vl1;
+    window.mainWidget.addChild = vl2;
+    window.mainWidget.addChild = vl3;
     auto hl1 = new HorizontalLayout();
     auto hl2 = new HorizontalLayout();
-    window.mainWidget.addChild = hl1;
-    window.mainWidget.addChild = hl2;
+    vl2.addChild = hl1;
+    vl2.addChild = hl2;
+
+    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 1"d);
+    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 2"d);
+    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 3"d);
+    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 4"d);
+    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 5"d);
+    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 6"d);
 
     hl1.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    hl1.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
-    //~ hl1.addChild = new Button("BUTTON_SUBMIT", "BUTTON_RESOURCE_ID");
+    hl1.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text 1"d, /*handler*/ null);
+    hl1.addChild = new Button("BUTTON_SUBMIT_0", "BUTTON_RESOURCE_ID_0");
 
     hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
     hl2.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    //~ hl2.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text"d, /*handler*/ null);
-    //~ hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
+    hl2.addChild = new InputBox(UIString.fromId("INPUT_CAPTION"c), UIString.fromId("INPUT_MSG"c), /*parentWindow*/ null, "initial text 2"d, /*handler*/ null);
+    hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
+
+    vl3.addChild = new Button("SOME_BUTTON_0", "Some button 0");
+    vl3.addChild = new TextWidget("SOME_TEXT", "This is text too"d);
+    vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
 
     import vibe.http.server: HTTPServerSettings;
     auto settings = new HTTPServerSettings;
