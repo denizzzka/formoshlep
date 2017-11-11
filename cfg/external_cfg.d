@@ -1,1 +1,2 @@
 enum WIDGET_STYLE_CONSOLE = true;
+enum WIDGET_CUSTOM_METHODS = true;

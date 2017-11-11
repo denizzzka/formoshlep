@@ -49,6 +49,7 @@ extern (C) int UIAppMain(string[] args)
     hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
 
     auto log_text = new TextWidget("SOME_TEXT", "This is text too"d);
+
     auto btn0 = new Button("SOME_BUTTON_0", "Press for add log line");
     btn0.click =
         delegate(Widget w)
@@ -60,6 +61,27 @@ extern (C) int UIAppMain(string[] args)
     vl3.addChild = btn0;
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
     window.mainWidget.addChild = log_text;
+
+    // test for custom method implementation
+    {
+        // dry run custom method (callback isn't installed)
+        log_text.customMethod!("test") = Widget.CustomMethodArgs(log_text);
+
+        // set new custom method callback
+        log_text.customMethod!("test") = Widget.CustomMethodArgs
+        (
+            (Widget w)
+            {
+                w.text = "asdf"d;
+            }
+        );
+
+        // run custom method for some widget
+        log_text.customMethod!("test") = Widget.CustomMethodArgs(log_text);
+
+        assert(log_text.text == "asdf"d);
+        assert(btn0.text != "asdf"d);
+    }
 
     window.show();
 
