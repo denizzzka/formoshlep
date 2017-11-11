@@ -46,7 +46,60 @@ class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
     FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
 }
 
-class EditLine : dlangui.widgets.editors.EditLine, WebWidget
+import dlangui.widgets.widget;
+public import dlangui.widgets.editors: EditLine;
+
+alias ReadStateCallback = void delegate(Widget, HTTPServerRequest);
+alias GenHtmlCallback = HtmlFragment delegate(Widget); // TODO: pure
+alias GetEventsCallback = FormoEvent[] delegate(Widget, HTTPServerRequest); // TODO: pure
+
+static this()
+{
+    EditLine.customMethod!"EditLine.readState"
+    (
+        Widget.CustomMethodArgs!ReadStateCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                auto e = cast(EditLine) w;
+
+                if(req.form.get(e.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
+                    e.text = req.form.get(e.id).to!dstring;
+            }
+        ),
+
+        null
+    );
+
+    EditLine.customMethod!"EditLine.toHtml" = Widget.CustomMethodArgs!GenHtmlCallback
+    (
+        (Widget w)
+        {
+            auto e = cast(EditLine) w;
+
+            return input(type="text", name=e.id, value=e.text.to!string);
+        }
+    );
+
+    EditLine.customMethod!"EditLine.getEvents"
+    (
+        Widget.CustomMethodArgs!GetEventsCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                enforce(w.action is null);
+
+                FormoEvent[] empty_ret;
+
+                return empty_ret;
+            }
+        ),
+
+        null
+    );
+}
+
+class EditLine_disabled : dlangui.widgets.editors.EditLine, WebWidget
 {
     this(string ID, dstring initialContent = null)
     {
