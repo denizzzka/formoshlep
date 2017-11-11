@@ -62,13 +62,15 @@ extern (C) int UIAppMain(string[] args)
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
     window.mainWidget.addChild = log_text;
 
-    // test for custom method implementation
+    // test of custom method implementation
     {
+        alias Callback = void delegate(Widget);
+
         // dry run custom method (callback isn't installed)
-        log_text.customMethod!("test") = Widget.CustomMethodArgs(log_text);
+        log_text.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
 
         // set new custom method callback
-        log_text.customMethod!("test") = Widget.CustomMethodArgs
+        log_text.customMethod!("test") = Widget.CustomMethodArgs!Callback
         (
             (Widget w)
             {
@@ -77,7 +79,7 @@ extern (C) int UIAppMain(string[] args)
         );
 
         // run custom method for some widget
-        log_text.customMethod!("test") = Widget.CustomMethodArgs(log_text);
+        log_text.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
 
         assert(log_text.text == "asdf"d);
         assert(btn0.text != "asdf"d);
