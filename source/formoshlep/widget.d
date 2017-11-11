@@ -27,54 +27,6 @@ alias ReadStateCallback = void delegate(Widget, HTTPServerRequest);
 alias GenHtmlCallback = HtmlFragment delegate(Widget); // TODO: pure
 alias GetEventsCallback = FormoEvent[] delegate(Widget, HTTPServerRequest); // TODO: pure
 
-static this()
-{
-    enum NAME = "EditLine";
-
-    EditLine.customMethod!(NAME~".readState")
-    (
-        Widget.CustomMethodArgs!ReadStateCallback
-        (
-            (Widget w, HTTPServerRequest req)
-            {
-                auto e = cast(EditLine) w;
-
-                if(req.form.get(e.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
-                    e.text = req.form.get(e.id).to!dstring;
-            }
-        ),
-
-        null
-    );
-
-    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
-    (
-        (Widget w)
-        {
-            auto e = cast(EditLine) w;
-
-            return input(type="text", name=e.id, value=e.text.to!string);
-        }
-    );
-
-    EditLine.customMethod!(NAME~".getEvents")
-    (
-        Widget.CustomMethodArgs!GetEventsCallback
-        (
-            (Widget w, HTTPServerRequest req)
-            {
-                enforce(w.action is null);
-
-                FormoEvent[] empty_ret;
-
-                return empty_ret;
-            }
-        ),
-
-        null
-    );
-}
-
 interface WebWidget
 {
     HtmlFragment toHtml() const; //TODO: make it package
@@ -115,6 +67,54 @@ static this()
             {
                 enforce(w.action is null);
                 FormoEvent[] empty_ret;
+                return empty_ret;
+            }
+        ),
+
+        null
+    );
+}
+
+static this()
+{
+    enum NAME = "EditLine";
+
+    EditLine.customMethod!(NAME~".readState")
+    (
+        Widget.CustomMethodArgs!ReadStateCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                auto e = cast(EditLine) w;
+
+                if(req.form.get(e.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
+                    e.text = req.form.get(e.id).to!dstring;
+            }
+        ),
+
+        null
+    );
+
+    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
+    (
+        (Widget w)
+        {
+            auto e = cast(EditLine) w;
+
+            return input(type="text", name=e.id, value=e.text.to!string);
+        }
+    );
+
+    EditLine.customMethod!(NAME~".getEvents")
+    (
+        Widget.CustomMethodArgs!GetEventsCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                enforce(w.action is null);
+
+                FormoEvent[] empty_ret;
+
                 return empty_ret;
             }
         ),
