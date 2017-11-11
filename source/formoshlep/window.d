@@ -28,7 +28,6 @@ class FormoshlepWindow : Window
     }
 
     import vibe.http.server: HTTPServerResponse;
-    import formoshlep.widget: WebWidget;
 
     package void genHttpServerResponse(ref HTTPServerResponse res)
     {
@@ -41,6 +40,7 @@ class FormoshlepWindow : Window
     {
         import dhtags;
         import std.conv: to;
+        import formoshlep.widget: toHtml;
 
         assert(mainWidget !is null);
 
@@ -59,7 +59,7 @@ class FormoshlepWindow : Window
                 (
                     tags.form(enctype="multipart/form-data", action=".", method="post")
                     (
-                        (cast(WebWidget) mainWidget).toHtml.toString(false)
+                        mainWidget.toHtml.toString(false)
                     )
                 )
             );

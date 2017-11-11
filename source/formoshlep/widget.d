@@ -1,18 +1,13 @@
 module formoshlep.widget;
 
-import dhtags.tags.tag: HtmlFragment;
+import dhtags.tags.tag: HtmlFragment, HtmlString;
 import vibe.http.server: HTTPServerRequest;
 import std.exception: enforce;
 import std.conv: to;
 import dhtags;
 
-import dlangui.core.i18n: UIString;
-import dlangui: Window;
 import dlangui.core.events;
-
-import dlangui.widgets.widget;
-import dlangui.widgets.editors: EditLine;
-import dlangui.widgets.layouts: LinearLayout;
+import dlangui.widgets.widget: Widget;
 
 package struct FormoEvent
 {
@@ -21,22 +16,16 @@ package struct FormoEvent
 }
 
 alias ReadStateCallback = void delegate(Widget, HTTPServerRequest);
-alias GenHtmlCallback = HtmlFragment delegate(Widget); // TODO: pure
+alias GenHtmlCallback = HtmlFragment delegate(in Widget); // TODO: pure
 alias GetEventsCallback = FormoEvent[] delegate(Widget, HTTPServerRequest); // TODO: pure
 
-interface WebWidget
-{
-    HtmlFragment toHtml() const; //TODO: make it package
-
-    void readState(HTTPServerRequest req); //TODO: make it package
-    FormoEvent[] getEvents(HTTPServerRequest req); //TODO: make it package
-}
+private enum NAME = "Widget";
 
 static this()
 {
-    enum NAME = "TextWidget";
+    import dlangui.widgets.controls: TextWidget;
 
-    EditLine.customMethod!(NAME~".readState")
+    TextWidget.customMethod!(NAME~".readState")
     (
         Widget.CustomMethodArgs!ReadStateCallback
         (
@@ -45,18 +34,17 @@ static this()
         null
     );
 
-    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
+    TextWidget.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
-        (Widget w)
+        (in Widget w)
         {
-            import dhtags.tags.tag: HtmlString;
             import std.conv: to;
 
             return new HtmlString(w.text.to!string);
         }
     );
 
-    EditLine.customMethod!(NAME~".getEvents")
+    TextWidget.customMethod!(NAME~".getEvents")
     (
         Widget.CustomMethodArgs!GetEventsCallback
         (
@@ -74,7 +62,7 @@ static this()
 
 static this()
 {
-    enum NAME = "EditLine";
+    import dlangui.widgets.editors: EditLine;
 
     EditLine.customMethod!(NAME~".readState")
     (
@@ -94,7 +82,7 @@ static this()
 
     EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
-        (Widget w)
+        (in Widget w)
         {
             auto e = cast(EditLine) w;
 
@@ -122,9 +110,9 @@ static this()
 
 static this()
 {
-    enum NAME = "Button";
+    import dlangui.widgets.controls: Button;
 
-    EditLine.customMethod!(NAME~".readState")
+    Button.customMethod!(NAME~".readState")
     (
         Widget.CustomMethodArgs!ReadStateCallback
         (
@@ -133,15 +121,15 @@ static this()
         null
     );
 
-    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
+    Button.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
-        (Widget w)
+        (in Widget w)
         {
             return input(type="submit", name=w.id, value=w.text.to!string);
         }
     );
 
-    EditLine.customMethod!(NAME~".getEvents")
+    Button.customMethod!(NAME~".getEvents")
     (
         Widget.CustomMethodArgs!GetEventsCallback
         (
@@ -165,9 +153,9 @@ static this()
 
 static this()
 {
-    enum NAME = "LinearLayout";
+    import dlangui.widgets.layouts: LinearLayout, Orientation;
 
-    EditLine.customMethod!(NAME~".readState")
+    LinearLayout.customMethod!(NAME~".readState")
     (
         Widget.CustomMethodArgs!ReadStateCallback
         (
@@ -176,19 +164,20 @@ static this()
         null
     );
 
-    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
+    LinearLayout.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
-        (Widget w)
+        (in Widget w)
         {
-            auto lay = cast(LinearLayout) w;
+            auto lay = cast(const LinearLayout) w;
 
-            final switch(lay.orientation) // TODO: make dlangui's orintation() const
+            //~ final switch(lay.orientation) // TODO: make dlangui's orientation() const
+            final switch(Orientation.Horizontal) // TODO: make dlangui's orientation() const
             {
                 case Orientation.Horizontal:
                     string ret;
 
                     for(auto i = 0; i < w.childCount; i++)
-                        ret ~= (cast(WebWidget) w.child(i)).toHtml.toString(false);
+                        ret ~= w.child(i).toHtml.toString(false);
 
                     return div(attrs.style="width: auto; float: left")(ret);
 
@@ -199,7 +188,7 @@ static this()
                         ret ~=
                             div(attrs.style="clear: both")
                             (
-                                (cast(WebWidget) w.child(i)).toHtml
+                                w.child(i).toHtml
                             ).toString(false);
 
                     return div(attrs.style="float: left")(ret);
@@ -207,7 +196,7 @@ static this()
         }
     );
 
-    EditLine.customMethod!(NAME~".getEvents")
+    LinearLayout.customMethod!(NAME~".getEvents")
     (
         Widget.CustomMethodArgs!GetEventsCallback
         (
@@ -225,9 +214,21 @@ static this()
     );
 }
 
+HtmlFragment toHtml(in Widget w)
+{
+    auto h = Widget.customMethod!(NAME~".toHtml")(Widget.CustomMethodArgs!GenHtmlCallback(w));
+
+    return (h is null) ? new HtmlString("") : h;
+}
+
+FormoEvent[] getEvents(Widget w, HTTPServerRequest req)
+{
+    return Widget.customMethod!(NAME~".getEvents")(Widget.CustomMethodArgs!GetEventsCallback(w), req);
+}
+
 void readWidgetsState(dlangui.widgets.widget.Widget w, HTTPServerRequest req)
 {
-    (cast(WebWidget) w).readState(req);
+    //~ w.readState(req);
 
     for(auto i = 0; i < w.childCount; i++)
         w.child(i).readWidgetsState(req);
@@ -235,7 +236,7 @@ void readWidgetsState(dlangui.widgets.widget.Widget w, HTTPServerRequest req)
 
 void processEvents(dlangui.widgets.widget.Widget w, HTTPServerRequest req)
 {
-    FormoEvent[] events = (cast(WebWidget) w).getEvents(req);
+    FormoEvent[] events = w.getEvents(req);
 
     foreach(e; events)
     {
