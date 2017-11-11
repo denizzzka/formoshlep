@@ -119,58 +119,45 @@ static this()
     );
 }
 
-class EditLine_disabled : dlangui.widgets.editors.EditLine, WebWidget
+static this()
 {
-    this(string ID, dstring initialContent = null)
-    {
-        super(ID, initialContent);
-    }
+    EditLine.customMethod!"Button.readState"
+    (
+        Widget.CustomMethodArgs!ReadStateCallback
+        (
+            (Widget w, HTTPServerRequest req){}
+        ),
+        null
+    );
 
-    HtmlFragment toHtml() const
-    {
-        return input(type="text", name=id, value=text.to!string);
-    }
+    EditLine.customMethod!"Button.toHtml" = Widget.CustomMethodArgs!GenHtmlCallback
+    (
+        (Widget w)
+        {
+            return input(type="submit", name=w.id, value=w.text.to!string);
+        }
+    );
 
-    void readState(HTTPServerRequest req)
-    {
-        if(req.form.get(id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
-            text = req.form.get(id).to!dstring;
-    }
+    EditLine.customMethod!"Button.getEvents"
+    (
+        Widget.CustomMethodArgs!GetEventsCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                if(req.form.get(w.id) is null)
+                    return null;
+                else
+                    return
+                    [
+                        FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
+                        FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
+                    ];
 
-    //TODO: Rewrite for JS-enabled widget
-    FormoEvent[] getEvents(HTTPServerRequest req)
-    {
-        enforce(action is null);
+            }
+        ),
 
-        return null;
-    }
-}
-
-class Button : dlangui.widgets.controls.Button, WebWidget
-{
-    this(string ID, string labelResourceId)
-    {
-        super(ID, labelResourceId);
-    }
-
-    HtmlFragment toHtml() const
-    {
-        return input(type="submit", name=id, value=text.to!string);
-    }
-
-    void readState(in HTTPServerRequest req) {}
-
-    FormoEvent[] getEvents(HTTPServerRequest req)
-    {
-        if(req.form.get(id) is null)
-            return null;
-        else
-            return
-            [
-                FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
-                FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
-            ];
-    }
+        null
+    );
 }
 
 import dlangui.widgets.widget: Orientation;
