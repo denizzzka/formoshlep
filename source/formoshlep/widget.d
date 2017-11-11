@@ -13,41 +13,15 @@ import dlangui.core.i18n: UIString;
 import dlangui: Window;
 import dlangui.core.events;
 
+import dlangui.widgets.widget;
+public import dlangui.widgets.controls: TextWidget;
+public import dlangui.widgets.editors: EditLine;
+
 package struct FormoEvent
 {
     KeyEvent keyEvent;
     MouseEvent mouseEvent;
 }
-
-interface WebWidget
-{
-    HtmlFragment toHtml() const; //TODO: make it package
-
-    void readState(HTTPServerRequest req); //TODO: make it package
-    FormoEvent[] getEvents(HTTPServerRequest req); //TODO: make it package
-}
-
-class TextWidget : dlangui.widgets.controls.TextWidget, WebWidget
-{
-    this(T = string)(string ID = null, T text = null)
-    {
-        super(ID, text);
-    }
-
-    HtmlFragment toHtml() const
-    {
-        import dhtags.tags.tag: HtmlString;
-        import std.conv: to;
-
-        return new HtmlString(text.to!string);
-    }
-
-    void readState(in HTTPServerRequest req) {}
-    FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
-}
-
-import dlangui.widgets.widget;
-public import dlangui.widgets.editors: EditLine;
 
 alias ReadStateCallback = void delegate(Widget, HTTPServerRequest);
 alias GenHtmlCallback = HtmlFragment delegate(Widget); // TODO: pure
@@ -91,6 +65,52 @@ static this()
 
                 FormoEvent[] empty_ret;
 
+                return empty_ret;
+            }
+        ),
+
+        null
+    );
+}
+
+interface WebWidget
+{
+    HtmlFragment toHtml() const; //TODO: make it package
+
+    void readState(HTTPServerRequest req); //TODO: make it package
+    FormoEvent[] getEvents(HTTPServerRequest req); //TODO: make it package
+}
+
+static this()
+{
+    EditLine.customMethod!"TextWidget.readState"
+    (
+        Widget.CustomMethodArgs!ReadStateCallback
+        (
+            (Widget w, HTTPServerRequest req){}
+        ),
+        null
+    );
+
+    EditLine.customMethod!"TextWidget.toHtml" = Widget.CustomMethodArgs!GenHtmlCallback
+    (
+        (Widget w)
+        {
+            import dhtags.tags.tag: HtmlString;
+            import std.conv: to;
+
+            return new HtmlString(w.text.to!string);
+        }
+    );
+
+    EditLine.customMethod!"TextWidget.getEvents"
+    (
+        Widget.CustomMethodArgs!GetEventsCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                enforce(w.action is null);
+                FormoEvent[] empty_ret;
                 return empty_ret;
             }
         ),
