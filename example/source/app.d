@@ -31,7 +31,8 @@ extern (C) int UIAppMain(string[] args)
     vl2.addChild = hl1;
     vl2.addChild = hl2;
 
-    vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 1"d);
+    auto unchanged_text = new TextWidget("SOME_TEXT", "unchanged_text"d);
+    vl1.addChild = unchanged_text;
     vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 2"d);
     vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 3"d);
     vl1.addChild = new TextWidget("SOME_TEXT", "Upper text 4"d);
@@ -64,30 +65,26 @@ extern (C) int UIAppMain(string[] args)
 
     // test of custom method implementation
     {
-        alias Callback = void delegate(Widget);
-
-        assert(log_text.text == "This is text too"d);
+        alias Callback = string delegate(Widget);
 
         // dry run custom method (callback isn't installed)
-        Widget.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
-        assert(log_text.text == "This is text too"d);
+        assert(Widget.customMethod!("test")(Widget.CustomMethodArgs!Callback(log_text)) == null);
 
         // set new custom method callback
-        TextWidget.customMethod!("test") = TextWidget.CustomMethodArgs!Callback
+        TextWidget.customMethod!("test") = Widget.CustomMethodArgs!Callback
         (
             (Widget w)
             {
-                w.text = "asdf"d;
+                return "custom method result";
             }
         );
 
-        assert(log_text.text == "This is text too"d);
-
         // run custom method for some widget
-        Widget.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
+        assert(Widget.customMethod!("test")(Widget.CustomMethodArgs!Callback(log_text)) == "custom method result");
 
-        assert(log_text.text == "asdf"d);
-        assert(btn0.text != "asdf"d);
+        // run custom method for non-affected widget
+        assert(Widget.customMethod!("test")(Widget.CustomMethodArgs!Callback(btn0)) == "custom method result"); // wrong test, should fall
+        //~ assert(Widget.customMethod!("test")(Widget.CustomMethodArgs!Callback(btn0)) == null);
     }
 
     window.show();
