@@ -6,16 +6,13 @@ import std.exception: enforce;
 import std.conv: to;
 import dhtags;
 
-static import dlangui.widgets.controls;
-static import dlangui.widgets.layouts;
-
 import dlangui.core.i18n: UIString;
 import dlangui: Window;
 import dlangui.core.events;
 
 import dlangui.widgets.widget;
-public import dlangui.widgets.controls: TextWidget;
-public import dlangui.widgets.editors: EditLine;
+import dlangui.widgets.editors: EditLine;
+import dlangui.widgets.layouts: LinearLayout;
 
 package struct FormoEvent
 {
@@ -166,81 +163,66 @@ static this()
     );
 }
 
-import dlangui.widgets.widget: Orientation;
-
-/// Arranges children vertically
-class VerticalLayout : LinearLayout
+static this()
 {
-    /// empty parameter list constructor - for usage by factory
-    this()
-    {
-        this(null);
-    }
-    /// create with ID parameter
-    this(string ID)
-    {
-        super(ID);
-        orientation = Orientation.Vertical;
-    }
-}
+    enum NAME = "LinearLayout";
 
-/// Arranges children horizontally
-class HorizontalLayout : LinearLayout
-{
-    /// empty parameter list constructor - for usage by factory
-    this()
-    {
-        this(null);
-    }
-    /// create with ID parameter
-    this(string ID)
-    {
-        super(ID);
-        orientation = Orientation.Horizontal;
-    }
-}
+    EditLine.customMethod!(NAME~".readState")
+    (
+        Widget.CustomMethodArgs!ReadStateCallback
+        (
+            (Widget w, HTTPServerRequest req){}
+        ),
+        null
+    );
 
-class LinearLayout : dlangui.widgets.layouts.LinearLayout, WebWidget
-{
-    this()
-    {
-        this(null);
-    }
-
-    /// create with ID parameter and orientation
-    this(string ID, Orientation orientation = Orientation.Vertical)
-    {
-        super(ID, orientation);
-    }
-
-    HtmlFragment toHtml() const
-    {
-        final switch(_orientation) // TODO: make dlangui's orintation() const
+    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
+    (
+        (Widget w)
         {
-            case Orientation.Horizontal:
-                string ret;
+            auto lay = cast(LinearLayout) w;
 
-                for(auto i = 0; i < childCount; i++)
-                    ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
+            final switch(lay.orientation) // TODO: make dlangui's orintation() const
+            {
+                case Orientation.Horizontal:
+                    string ret;
 
-                return div(attrs.style="width: auto; float: left")(ret);
+                    for(auto i = 0; i < w.childCount; i++)
+                        ret ~= (cast(WebWidget) w.child(i)).toHtml.toString(false);
 
-            case Orientation.Vertical:
-                string ret;
+                    return div(attrs.style="width: auto; float: left")(ret);
 
-                for(auto i = 0; i < childCount; i++)
-                    ret ~=
-                        div(attrs.style="clear: both")
-                        (
-                            (cast(WebWidget) child(i)).toHtml
-                        ).toString(false);
+                case Orientation.Vertical:
+                    string ret;
 
-                return div(attrs.style="float: left")(ret);
+                    for(auto i = 0; i < w.childCount; i++)
+                        ret ~=
+                            div(attrs.style="clear: both")
+                            (
+                                (cast(WebWidget) w.child(i)).toHtml
+                            ).toString(false);
+
+                    return div(attrs.style="float: left")(ret);
+            }
         }
-    }
+    );
 
-    void readState(in HTTPServerRequest req) {}
-    FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
+    EditLine.customMethod!(NAME~".getEvents")
+    (
+        Widget.CustomMethodArgs!GetEventsCallback
+        (
+            (Widget w, HTTPServerRequest req)
+            {
+                enforce(w.action is null);
+
+                FormoEvent[] empty_ret;
+
+                return empty_ret;
+            }
+        ),
+
+        null
+    );
 }
 
 void readWidgetsState(dlangui.widgets.widget.Widget w, HTTPServerRequest req)
