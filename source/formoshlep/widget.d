@@ -29,7 +29,9 @@ alias GetEventsCallback = FormoEvent[] delegate(Widget, HTTPServerRequest); // T
 
 static this()
 {
-    EditLine.customMethod!"EditLine.readState"
+    enum NAME = "EditLine";
+
+    EditLine.customMethod!(NAME~".readState")
     (
         Widget.CustomMethodArgs!ReadStateCallback
         (
@@ -45,7 +47,7 @@ static this()
         null
     );
 
-    EditLine.customMethod!"EditLine.toHtml" = Widget.CustomMethodArgs!GenHtmlCallback
+    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
         (Widget w)
         {
@@ -55,7 +57,7 @@ static this()
         }
     );
 
-    EditLine.customMethod!"EditLine.getEvents"
+    EditLine.customMethod!(NAME~".getEvents")
     (
         Widget.CustomMethodArgs!GetEventsCallback
         (
@@ -83,7 +85,9 @@ interface WebWidget
 
 static this()
 {
-    EditLine.customMethod!"TextWidget.readState"
+    enum NAME = "TextWidget";
+
+    EditLine.customMethod!(NAME~".readState")
     (
         Widget.CustomMethodArgs!ReadStateCallback
         (
@@ -92,7 +96,7 @@ static this()
         null
     );
 
-    EditLine.customMethod!"TextWidget.toHtml" = Widget.CustomMethodArgs!GenHtmlCallback
+    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
         (Widget w)
         {
@@ -103,7 +107,7 @@ static this()
         }
     );
 
-    EditLine.customMethod!"TextWidget.getEvents"
+    EditLine.customMethod!(NAME~".getEvents")
     (
         Widget.CustomMethodArgs!GetEventsCallback
         (
@@ -121,7 +125,9 @@ static this()
 
 static this()
 {
-    EditLine.customMethod!"Button.readState"
+    enum NAME = "Button";
+
+    EditLine.customMethod!(NAME~".readState")
     (
         Widget.CustomMethodArgs!ReadStateCallback
         (
@@ -130,7 +136,7 @@ static this()
         null
     );
 
-    EditLine.customMethod!"Button.toHtml" = Widget.CustomMethodArgs!GenHtmlCallback
+    EditLine.customMethod!(NAME~".toHtml") = Widget.CustomMethodArgs!GenHtmlCallback
     (
         (Widget w)
         {
@@ -138,7 +144,7 @@ static this()
         }
     );
 
-    EditLine.customMethod!"Button.getEvents"
+    EditLine.customMethod!(NAME~".getEvents")
     (
         Widget.CustomMethodArgs!GetEventsCallback
         (
