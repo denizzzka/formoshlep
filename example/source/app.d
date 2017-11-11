@@ -66,11 +66,14 @@ extern (C) int UIAppMain(string[] args)
     {
         alias Callback = void delegate(Widget);
 
+        assert(log_text.text == "This is text too"d);
+
         // dry run custom method (callback isn't installed)
-        log_text.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
+        Widget.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
+        assert(log_text.text == "This is text too"d);
 
         // set new custom method callback
-        log_text.customMethod!("test") = Widget.CustomMethodArgs!Callback
+        TextWidget.customMethod!("test") = TextWidget.CustomMethodArgs!Callback
         (
             (Widget w)
             {
@@ -78,8 +81,10 @@ extern (C) int UIAppMain(string[] args)
             }
         );
 
+        assert(log_text.text == "This is text too"d);
+
         // run custom method for some widget
-        log_text.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
+        Widget.customMethod!("test") = Widget.CustomMethodArgs!Callback(log_text);
 
         assert(log_text.text == "asdf"d);
         assert(btn0.text != "asdf"d);
