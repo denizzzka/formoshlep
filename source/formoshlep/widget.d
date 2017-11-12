@@ -4,7 +4,6 @@ import dht = dhtags;
 import attrs = dhtags.attrs;
 import dhtags.tags.tag: HtmlFragment, HtmlString;
 import vibe.http.server: HTTPServerRequest;
-import std.exception: enforce;
 import std.conv: to;
 import openmethods;
 mixin(registerMethods);
@@ -14,7 +13,6 @@ import dlangui.widgets.controls: TextWidget, Button;
 import dlangui.widgets.editors: EditLine;
 import dlangui.widgets.layouts: LinearLayout, Orientation;
 
-//~ import dlangui: Window;
 import dlangui.core.events;
 
 package struct FormoEvent
@@ -46,6 +44,8 @@ HtmlFragment toHtml(virtual!(const Widget));
 }
 @method FormoEvent[] _getEvents(EditLine w, HTTPServerRequest req)
 {
+    import std.exception: enforce;
+
     enforce(w.action is null);
 
     return null;
@@ -72,48 +72,34 @@ HtmlFragment toHtml(virtual!(const Widget));
         ];
 }
 
-//~ class LinearLayout : dlangui.widgets.layouts.LinearLayout, WebWidget
-//~ {
-    //~ this()
-    //~ {
-        //~ this(null);
-    //~ }
+// LinearLayout:
+@method HtmlFragment _toHtml(in LinearLayout w)
+{
+    // TODO: make dlangui's orintation() const
+    auto orientation = (cast(LinearLayout) w).orientation();
+    final switch(orientation)
+    {
+        case Orientation.Horizontal:
+            string ret;
 
-    //~ /// create with ID parameter and orientation
-    //~ this(string ID, Orientation orientation = Orientation.Vertical)
-    //~ {
-        //~ super(ID, orientation);
-    //~ }
+            for(auto i = 0; i < w.childCount; i++)
+                ret ~= w.child(i).toHtml.toString(false);
 
-    //~ HtmlFragment toHtml() const
-    //~ {
-        //~ final switch(_orientation) // TODO: make dlangui's orintation() const
-        //~ {
-            //~ case Orientation.Horizontal:
-                //~ string ret;
+            return dht.div(attrs.style="width: auto; float: left")(ret);
 
-                //~ for(auto i = 0; i < childCount; i++)
-                    //~ ret ~= (cast(WebWidget) child(i)).toHtml.toString(false);
+        case Orientation.Vertical:
+            string ret;
 
-                //~ return div(attrs.style="width: auto; float: left")(ret);
+            for(auto i = 0; i < w.childCount; i++)
+                ret ~=
+                    dht.div(attrs.style="clear: both")
+                    (
+                        w.child(i).toHtml
+                    ).toString(false);
 
-            //~ case Orientation.Vertical:
-                //~ string ret;
-
-                //~ for(auto i = 0; i < childCount; i++)
-                    //~ ret ~=
-                        //~ div(attrs.style="clear: both")
-                        //~ (
-                            //~ (cast(WebWidget) child(i)).toHtml
-                        //~ ).toString(false);
-
-                //~ return div(attrs.style="float: left")(ret);
-        //~ }
-    //~ }
-
-    //~ void readState(in HTTPServerRequest req) {}
-    //~ FormoEvent[] getEvents(HTTPServerRequest req) { return null; }
-//~ }
+            return dht.div(attrs.style="float: left")(ret);
+    }
+}
 
 static this()
 {
