@@ -10,7 +10,7 @@ import openmethods;
 mixin(registerMethods);
 
 import dlangui.widgets.widget: Widget;
-import dlangui.widgets.controls: TextWidget;
+import dlangui.widgets.controls: TextWidget, Button;
 import dlangui.widgets.editors: EditLine;
 import dlangui.widgets.layouts: LinearLayout, Orientation;
 
@@ -29,7 +29,7 @@ HtmlFragment toHtml(virtual!(const Widget));
 
 // Custom Widget methods:
 @method void _readState(Widget w, HTTPServerRequest req) {}
-@method HtmlFragment _toHtml(in Widget w) { return new HtmlString(""); }
+@method HtmlFragment _toHtml(in Widget w) { assert(false, "HTML output isn't implemented"); }
 @method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req) { return null; }
 
 // TextWidget:
@@ -39,12 +39,12 @@ HtmlFragment toHtml(virtual!(const Widget));
 }
 
 // EditLine:
-@method void _readState(Widget w, HTTPServerRequest req)
+@method void _readState(EditLine w, HTTPServerRequest req)
 {
     if(req.form.get(w.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
         w.text = req.form.get(w.id).to!dstring;
 }
-@method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req)
+@method FormoEvent[] _getEvents(EditLine w, HTTPServerRequest req)
 {
     enforce(w.action is null);
 
@@ -55,32 +55,22 @@ HtmlFragment toHtml(virtual!(const Widget));
     return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string);
 }
 
-//~ class Button : dlangui.widgets.controls.Button, WebWidget
-//~ {
-    //~ this(string ID, string labelResourceId)
-    //~ {
-        //~ super(ID, labelResourceId);
-    //~ }
-
-    //~ HtmlFragment toHtml() const
-    //~ {
-        //~ return input(type="submit", name=id, value=text.to!string);
-    //~ }
-
-    //~ void readState(in HTTPServerRequest req) {}
-
-    //~ FormoEvent[] getEvents(HTTPServerRequest req)
-    //~ {
-        //~ if(req.form.get(id) is null)
-            //~ return null;
-        //~ else
-            //~ return
-            //~ [
-                //~ FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
-                //~ FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
-            //~ ];
-    //~ }
-//~ }
+// Button:
+@method HtmlFragment _toHtml(in Button w)
+{
+    return dht.input(dht.type="submit", dht.name=w.id, dht.value=w.text.to!string);
+}
+@method FormoEvent[] _getEvents(Button w, HTTPServerRequest req)
+{
+    if(req.form.get(w.id) is null)
+        return null;
+    else
+        return
+        [
+            FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
+            FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
+        ];
+}
 
 //~ class LinearLayout : dlangui.widgets.layouts.LinearLayout, WebWidget
 //~ {
