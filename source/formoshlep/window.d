@@ -28,7 +28,6 @@ class FormoshlepWindow : Window
     }
 
     import vibe.http.server: HTTPServerResponse;
-    import formoshlep.widget: WebWidget;
 
     package void genHttpServerResponse(ref HTTPServerResponse res)
     {
@@ -59,10 +58,17 @@ class FormoshlepWindow : Window
                 (
                     tags.form(enctype="multipart/form-data", action=".", method="post")
                     (
-                        (cast(WebWidget) mainWidget).toHtml.toString(false)
+                        mainWidgetToHtml.toString(false)
                     )
                 )
             );
+    }
+
+    private HtmlFragment mainWidgetToHtml() const
+    {
+        import formoshlep.widget;
+
+        return mainWidget.toHtml;
     }
 
     override:
