@@ -44,23 +44,16 @@ HtmlFragment toHtml(virtual!(const Widget));
     if(req.form.get(w.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
         w.text = req.form.get(w.id).to!dstring;
 }
+@method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req)
+{
+    enforce(w.action is null);
+
+    return null;
+}
 @method HtmlFragment _toHtml(in EditLine w)
 {
     return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string);
 }
-
-//~ class EditLine : dlangui.widgets.editors.EditLine, WebWidget
-//~ {
-
-
-    //~ //TODO: Rewrite for JS-enabled widget
-    //~ FormoEvent[] getEvents(HTTPServerRequest req)
-    //~ {
-        //~ enforce(action is null);
-
-        //~ return null;
-    //~ }
-//~ }
 
 //~ class Button : dlangui.widgets.controls.Button, WebWidget
 //~ {
