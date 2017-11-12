@@ -23,12 +23,12 @@ package struct FormoEvent
     MouseEvent mouseEvent;
 }
 
-void readState(virtual!(const Widget), virtual!(const HTTPServerRequest));
+void readState(virtual!Widget, virtual!HTTPServerRequest);
 FormoEvent[] getEvents(virtual!Widget, virtual!(const HTTPServerRequest));
 HtmlFragment toHtml(virtual!(const Widget));
 
 // Custom Widget methods:
-@method void _readState(in Widget w, in HTTPServerRequest req) {}
+@method void _readState(Widget w, HTTPServerRequest req) {}
 @method HtmlFragment _toHtml(in Widget w) { return new HtmlString(""); }
 @method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req) { return null; }
 
@@ -39,6 +39,11 @@ HtmlFragment toHtml(virtual!(const Widget));
 }
 
 // EditLine:
+@method void _readState(Widget w, HTTPServerRequest req)
+{
+    if(req.form.get(w.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
+        w.text = req.form.get(w.id).to!dstring;
+}
 @method HtmlFragment _toHtml(in EditLine w)
 {
     return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string);
@@ -47,16 +52,6 @@ HtmlFragment toHtml(virtual!(const Widget));
 //~ class EditLine : dlangui.widgets.editors.EditLine, WebWidget
 //~ {
 
-    //~ HtmlFragment toHtml() const
-    //~ {
-        //~ return input(type="text", name=id, value=text.to!string);
-    //~ }
-
-    //~ void readState(HTTPServerRequest req)
-    //~ {
-        //~ if(req.form.get(id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
-            //~ text = req.form.get(id).to!dstring;
-    //~ }
 
     //~ //TODO: Rewrite for JS-enabled widget
     //~ FormoEvent[] getEvents(HTTPServerRequest req)
