@@ -5,15 +5,9 @@ import attrs = dhtags.attrs;
 import dhtags.tags.tag: HtmlFragment, HtmlString;
 import vibe.http.server: HTTPServerRequest;
 import std.conv: to;
+import dlangui.core.events;
 import openmethods;
 mixin(registerMethods);
-
-import dlangui.widgets.widget: Widget;
-import dlangui.widgets.controls: TextWidget, Button;
-import dlangui.widgets.editors: EditLine;
-import dlangui.widgets.layouts: LinearLayout, Orientation;
-
-import dlangui.core.events;
 
 package struct FormoEvent
 {
@@ -21,22 +15,24 @@ package struct FormoEvent
     MouseEvent mouseEvent;
 }
 
+// Custom Widget methods:
 void readState(virtual!Widget, virtual!HTTPServerRequest);
 FormoEvent[] getEvents(virtual!Widget, virtual!(const HTTPServerRequest));
 HtmlFragment toHtml(virtual!(const Widget));
 
-// Custom Widget methods:
+// Custom methods implementation:
+import dlangui.widgets.widget: Widget;
 @method void _readState(Widget w, HTTPServerRequest req) {}
 @method HtmlFragment _toHtml(in Widget w) { assert(false, "HTML output isn't implemented"); }
 @method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req) { return null; }
 
-// TextWidget:
+import dlangui.widgets.controls: TextWidget;
 @method HtmlFragment _toHtml(in TextWidget w)
 {
     return new HtmlString(w.text.to!string);
 }
 
-// EditLine:
+import dlangui.widgets.editors: EditLine;
 @method void _readState(EditLine w, HTTPServerRequest req)
 {
     if(req.form.get(w.id, "IMPOSSIBLE_VALUE") != "IMPOSSIBLE_VALUE") //FIXME: remove that shit
@@ -55,7 +51,7 @@ HtmlFragment toHtml(virtual!(const Widget));
     return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string);
 }
 
-// Button:
+import dlangui.widgets.controls: Button;
 @method HtmlFragment _toHtml(in Button w)
 {
     return dht.input(dht.type="submit", dht.name=w.id, dht.value=w.text.to!string);
@@ -72,7 +68,7 @@ HtmlFragment toHtml(virtual!(const Widget));
         ];
 }
 
-// LinearLayout:
+import dlangui.widgets.layouts: LinearLayout, Orientation;
 @method HtmlFragment _toHtml(in LinearLayout w)
 {
     // TODO: make dlangui's orintation() const
