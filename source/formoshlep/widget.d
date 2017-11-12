@@ -9,7 +9,9 @@ import dlangui.core.events;
 import openmethods;
 mixin(registerMethods);
 
-package struct FormoEvent
+package:
+
+struct FormoEvent
 {
     KeyEvent keyEvent;
     MouseEvent mouseEvent;
@@ -19,6 +21,33 @@ package struct FormoEvent
 void readState(virtual!Widget, virtual!HTTPServerRequest);
 FormoEvent[] getEvents(virtual!Widget, virtual!(const HTTPServerRequest));
 HtmlFragment toHtml(virtual!(const Widget));
+
+void readWidgetsState(Widget w, HTTPServerRequest req)
+{
+    w.readState(req);
+
+    for(auto i = 0; i < w.childCount; i++)
+        w.child(i).readWidgetsState(req);
+}
+
+void processEvents(Widget w, HTTPServerRequest req)
+{
+    FormoEvent[] events = w.getEvents(req);
+
+    foreach(e; events)
+    {
+        if(e.keyEvent !is null)
+            w.onKeyEvent(e.keyEvent);
+
+        if(e.mouseEvent !is null)
+            w.onMouseEvent(e.mouseEvent);
+    }
+
+    for(auto i = 0; i < w.childCount; i++)
+        w.child(i).processEvents(req);
+}
+
+public:
 
 // Custom methods implementation:
 import dlangui.widgets.widget: Widget;
@@ -71,9 +100,7 @@ import dlangui.widgets.controls: Button;
 import dlangui.widgets.layouts: LinearLayout, Orientation;
 @method HtmlFragment _toHtml(in LinearLayout w)
 {
-    // TODO: make dlangui's orintation() const
-    auto orientation = (cast(LinearLayout) w).orientation();
-    final switch(orientation)
+    final switch(w.orientation)
     {
         case Orientation.Horizontal:
             string ret;
@@ -100,29 +127,4 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
 static this()
 {
     updateMethods();
-}
-
-void readWidgetsState(Widget w, HTTPServerRequest req)
-{
-    w.readState(req);
-
-    for(auto i = 0; i < w.childCount; i++)
-        w.child(i).readWidgetsState(req);
-}
-
-void processEvents(Widget w, HTTPServerRequest req)
-{
-    FormoEvent[] events = w.getEvents(req);
-
-    foreach(e; events)
-    {
-        if(e.keyEvent !is null)
-            w.onKeyEvent(e.keyEvent);
-
-        if(e.mouseEvent !is null)
-            w.onMouseEvent(e.mouseEvent);
-    }
-
-    for(auto i = 0; i < w.childCount; i++)
-        w.child(i).processEvents(req);
 }
