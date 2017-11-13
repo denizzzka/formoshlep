@@ -77,7 +77,7 @@ import dlangui.widgets.editors: EditLine;
 }
 @method HtmlFragment _toHtml(EditLine w)
 {
-    return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
+    return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
 }
 
 import dlangui.widgets.controls: Button;
@@ -131,25 +131,22 @@ static this()
     updateMethods();
 }
 
-import dhtags.attrs.attribute: HtmlAttribute;
-
-HtmlAttribute genHtmlStyle(Widget w)
+string styleStr(Widget w)
 {
-    import dlangui.widgets.styles: Style;
-
     auto s = w.ownStyle;
 
-    return HtmlAttribute("style",
+    return
         "font-size: "~s.fontSize.to!string~", "~
-        "font-weight: "~s.fontWeight.to!string
-    );
+        "font-weight: "~s.fontWeight.to!string;
 }
 
 import dhtags.tags.tag: HtmlTag;
 
 HtmlTag addStyle(HtmlTag tag, Widget w)
 {
-    tag.attrs ~= w.genHtmlStyle;
+    import dhtags.attrs.attribute: HtmlAttribute;
+
+    tag.attrs ~= HtmlAttribute("style", w.styleStr);
 
     return tag;
 }
