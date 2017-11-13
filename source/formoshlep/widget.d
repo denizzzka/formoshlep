@@ -1,6 +1,6 @@
 module formoshlep.widget;
 
-import dht = dhtags;
+import tags = dhtags.tags;
 import attrs = dhtags.attrs;
 import dhtags.tags.tag: HtmlFragment, HtmlString;
 import vibe.http.server: HTTPServerRequest;
@@ -58,7 +58,7 @@ import dlangui.widgets.widget: Widget;
 import dlangui.widgets.controls: TextWidget;
 @method HtmlFragment _toHtml(TextWidget w)
 {
-    return dht.tags.span(w.text.to!string).addStyle(w);
+    return tags.span(w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.editors: EditLine;
@@ -77,13 +77,13 @@ import dlangui.widgets.editors: EditLine;
 }
 @method HtmlFragment _toHtml(EditLine w)
 {
-    return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
+    return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.controls: Button;
 @method HtmlFragment _toHtml(Button w)
 {
-    return dht.input(dht.type="submit", dht.name=w.id, dht.value=w.text.to!string).addStyle(w);
+    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 @method FormoEvent[] _getEvents(Button w, HTTPServerRequest req)
 {
@@ -108,19 +108,19 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
             for(auto i = 0; i < w.childCount; i++)
                 ret ~= w.child(i).toHtml.toString(false);
 
-            return dht.div(attrs.style="width: auto; float: left")(ret);
+            return tags.div(attrs.style="width: auto; float: left")(ret);
 
         case Orientation.Vertical:
             string ret;
 
             for(auto i = 0; i < w.childCount; i++)
                 ret ~=
-                    dht.div(attrs.style="clear: both")
+                    tags.div(attrs.style="clear: both")
                     (
                         w.child(i).toHtml
                     ).toString(false);
 
-            return dht.div(attrs.style="float: left")(ret);
+            return tags.div(attrs.style="float: left")(ret);
     }
 }
 
