@@ -136,7 +136,7 @@ string styleStr(Widget w)
     auto s = w.ownStyle;
 
     return
-        "font-size: "~s.fontSize.to!string~", "~
+        "font-size: "~s.fontSize.to!string~"px; "~
         "font-weight: "~s.fontWeight.to!string;
 }
 

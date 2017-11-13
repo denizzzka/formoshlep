@@ -36,11 +36,11 @@ class FormoshlepFont : Font
     private Glyph _glyph;
 
     this() {
-        _spaceWidth = 1;
-        _glyph.blackBoxX = 1;
-        _glyph.blackBoxY = 1;
-        _glyph.widthPixels = 1;
-        _glyph.widthScaled = 1 << 6;
+        _spaceWidth = 16;
+        _glyph.blackBoxX = 16;
+        _glyph.blackBoxY = 16;
+        _glyph.widthPixels = 16;
+        _glyph.widthScaled = 16;
         _glyph.originX = 0;
         _glyph.originY = 0;
         _glyph.subpixelMode = SubpixelRenderingMode.None;
@@ -54,8 +54,8 @@ class FormoshlepFont : Font
 
     override:
 
-    int size() @property { return 1; }
-    int height() @property { return 1; }
+    int size() @property { return 16; }
+    int height() @property { return 16; }
     int weight() @property { return 400; }
     int baseline() @property { return 0; }
     bool italic() @property { return false; }
