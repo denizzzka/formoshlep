@@ -18,9 +18,9 @@ struct FormoEvent
 }
 
 // Custom Widget methods:
-void readState(virtual!Widget, virtual!HTTPServerRequest);
-FormoEvent[] getEvents(virtual!Widget, virtual!(const HTTPServerRequest));
-HtmlFragment toHtml(virtual!(const Widget));
+void readState(virtual!Widget, HTTPServerRequest);
+FormoEvent[] getEvents(virtual!Widget, HTTPServerRequest);
+HtmlFragment toHtml(virtual!Widget);
 
 void readWidgetsState(Widget w, HTTPServerRequest req)
 {
@@ -52,13 +52,13 @@ public:
 // Custom methods implementation:
 import dlangui.widgets.widget: Widget;
 @method void _readState(Widget w, HTTPServerRequest req) {}
-@method HtmlFragment _toHtml(in Widget w) { assert(false, "HTML output isn't implemented"); }
 @method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req) { return null; }
+@method HtmlFragment _toHtml(Widget w) { assert(false, "HTML output isn't implemented"); }
 
 import dlangui.widgets.controls: TextWidget;
-@method HtmlFragment _toHtml(in TextWidget w)
+@method HtmlFragment _toHtml(TextWidget w)
 {
-    return new HtmlString(w.text.to!string);
+    return dht.tags.span(w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.editors: EditLine;
@@ -75,15 +75,15 @@ import dlangui.widgets.editors: EditLine;
 
     return null;
 }
-@method HtmlFragment _toHtml(in EditLine w)
+@method HtmlFragment _toHtml(EditLine w)
 {
-    return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string);
+    return dht.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.controls: Button;
-@method HtmlFragment _toHtml(in Button w)
+@method HtmlFragment _toHtml(Button w)
 {
-    return dht.input(dht.type="submit", dht.name=w.id, dht.value=w.text.to!string);
+    return dht.input(dht.type="submit", dht.name=w.id, dht.value=w.text.to!string).addStyle(w);
 }
 @method FormoEvent[] _getEvents(Button w, HTTPServerRequest req)
 {
@@ -98,7 +98,7 @@ import dlangui.widgets.controls: Button;
 }
 
 import dlangui.widgets.layouts: LinearLayout, Orientation;
-@method HtmlFragment _toHtml(in LinearLayout w)
+@method HtmlFragment _toHtml(LinearLayout w)
 {
     final switch(w.orientation)
     {
@@ -124,7 +124,32 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
     }
 }
 
+private:
+
 static this()
 {
     updateMethods();
+}
+
+import dhtags.attrs.attribute: HtmlAttribute;
+
+HtmlAttribute genHtmlStyle(Widget w)
+{
+    import dlangui.widgets.styles: Style;
+
+    auto s = w.ownStyle;
+
+    return HtmlAttribute("style",
+        "font-size: "~s.fontSize.to!string~", "~
+        "font-weight: "~s.fontWeight.to!string
+    );
+}
+
+import dhtags.tags.tag: HtmlTag;
+
+HtmlTag addStyle(HtmlTag tag, Widget w)
+{
+    tag.attrs ~= w.genHtmlStyle;
+
+    return tag;
 }

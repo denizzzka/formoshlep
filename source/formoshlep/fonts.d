@@ -2,6 +2,8 @@ module formoshlep.fonts;
 
 import dlangui.graphics.fonts;
 
+package:
+
 class FormoshlepFontManager : FontManager
 {
     private static FontRef font;

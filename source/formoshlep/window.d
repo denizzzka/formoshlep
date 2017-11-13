@@ -36,7 +36,7 @@ class FormoshlepWindow : Window
 
     import dhtags.tags.tag: HtmlFragment, HtmlString;
 
-    private HtmlFragment toHtml() const
+    private HtmlFragment toHtml()
     {
         import dhtags;
         import std.conv: to;
@@ -64,7 +64,7 @@ class FormoshlepWindow : Window
             );
     }
 
-    private HtmlFragment mainWidgetToHtml() const
+    private HtmlFragment mainWidgetToHtml()
     {
         import formoshlep.widget;
 
