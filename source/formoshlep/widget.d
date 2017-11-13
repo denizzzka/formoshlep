@@ -83,7 +83,7 @@ import dlangui.widgets.editors: EditLine;
 import dlangui.widgets.controls: Button;
 @method HtmlFragment _toHtml(Button w)
 {
-    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
+    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
 }
 @method FormoEvent[] _getEvents(Button w, HTTPServerRequest req)
 {
