@@ -76,36 +76,4 @@ class FormoshlepFont : Font
     {
         assert(false, __FUNCTION__~" isn't implemented");
     }
-
-    int measureText(const dchar[] text, ref int[] widths, int maxWidth, int tabSize, int tabOffset, uint textFlags)
-    {
-        int len;
-
-        foreach(const c; text)
-        {
-            if(!isHotkeySymbol(c, textFlags))
-                len++;
-        }
-
-        if(len > maxWidth)
-            len = maxWidth;
-
-        if(widths.length < len)
-            widths.length = len;
-
-        foreach(int i; 0 .. len)
-            widths[i] = i+1;
-
-        import std.conv: to;
-
-        Log.v(__FUNCTION__~" len="~len.to!string~" widths="~widths.to!string);
-
-        return len;
-    }
-
-    // FIXME
-    Point measureMultilineText(const dchar[] text, int maxLines, int maxWidth, int tabSize, int tabOffset, uint textFlags)
-    {
-        assert(false, __FUNCTION__~" isn't implemented");
-    }
 }
