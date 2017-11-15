@@ -133,9 +133,12 @@ static this()
 
 string styleStr(Widget w)
 {
+    import std.format;
+
     auto s = w.ownStyle;
 
     return
+        "color: "~s.textColor.format!"#%06X; "~
         "font-size: "~s.fontSize.to!string~"px; "~
         "font-weight: "~s.fontWeight.to!string;
 }
