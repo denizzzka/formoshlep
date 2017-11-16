@@ -6,21 +6,27 @@ package:
 
 ImageDrawBuf loadImageFromStream(immutable ubyte[] stream, string filename)
 {
-    return new ImageDrawBuf(filename);
+    import dlangui.graphics.images: origLoad = loadImageFromStream;
+
+    ColorDrawBuf ret = origLoad(stream, filename);
+
+    return new ImageDrawBuf(filename, ret);
 }
 
 class ImageDrawBuf : ColorDrawBuf
 {
-    private string[string] availableImages;
+    private static string[string] availableImages;
+    private string filename;
 
-    this(string filename)
+    this(string _filename, ColorDrawBuf drawBuf)
     {
+        filename = _filename;
         availableImages[filename] = filename;
 
-        super(10, 10); //FIXME this values
+        super(drawBuf); //FIXME this values
     }
 
-    bool isAvailable(string filename)
+    static bool isAvailable(string filename)
     {
         return (filename in availableImages) !is null;
     }
