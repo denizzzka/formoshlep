@@ -18,9 +18,14 @@ class FormoshlepPlatform : Platform
 
     void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     {
-        //~ if (req.path != "/")
-            //~ res.writeBody("Unknown path");
-        //~ else
+        if (req.path == "/res")
+        {
+            // TODO: check URL and return picture from path dlangui/views/res
+            res.writeBody("Pictures output");
+        }
+        else if (req.path != "/")
+            res.writeBody("Unknown path");
+        else
         {
             assert(window !is null);
 

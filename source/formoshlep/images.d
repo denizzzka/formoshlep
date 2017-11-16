@@ -16,7 +16,7 @@ ImageDrawBuf loadImageFromStream(immutable ubyte[] stream, string filename)
 class ImageDrawBuf : ColorDrawBuf
 {
     private static string[string] availableImages;
-    private string filename;
+    private const string filename;
 
     this(string _filename, ColorDrawBuf drawBuf)
     {

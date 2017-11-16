@@ -102,7 +102,7 @@ import dlangui.widgets.controls: ImageWidget;
 {
     assert(w.drawable !is null);
 
-    return tags.img(attrs.src="asd", attrs.width=w.drawable.width, attrs.height=w.drawable.height);
+    return tags.img(attrs.src="/res/"/*~w.drawable.filename*/, attrs.width=w.drawable.width, attrs.height=w.drawable.height);
 }
 
 import dlangui.widgets.layouts: LinearLayout, Orientation;
