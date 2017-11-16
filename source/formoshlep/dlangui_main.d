@@ -6,6 +6,7 @@ extern(C) int DLANGUImain(string[] args)
 {
     import formoshlep.platform: FormoshlepPlatform;
     import formoshlep.fonts: FormoshlepFontManager;
+    import formoshlep.images: loadImageFromStream;
 
     initLogs();
     Log.setLogLevel = LogLevel.Debug;
@@ -13,6 +14,7 @@ extern(C) int DLANGUImain(string[] args)
     Platform.setInstance = new FormoshlepPlatform();
     FontManager.instance = new FormoshlepFontManager();
     initResourceManagers();
+    Platform.instance.imageLoader = &loadImageFromStream;
 
     version (Windows)
     {

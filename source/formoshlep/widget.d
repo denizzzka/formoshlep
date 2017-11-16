@@ -97,6 +97,14 @@ import dlangui.widgets.controls: Button;
         ];
 }
 
+import dlangui.widgets.controls: ImageWidget;
+@method HtmlFragment _toHtml(ImageWidget w)
+{
+    assert(w.drawable !is null);
+
+    return tags.img(attrs.src="asd", attrs.width=w.drawable.width, attrs.height=w.drawable.height);
+}
+
 import dlangui.widgets.layouts: LinearLayout, Orientation;
 @method HtmlFragment _toHtml(LinearLayout w)
 {

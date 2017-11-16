@@ -63,6 +63,7 @@ extern (C) int UIAppMain(string[] args)
     vl3.addChild = btn0;
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
     window.mainWidget.addChild = log_text;
+    vl3.addChild = new ImageWidget("Computer", "computer");
 
     window.show();
 
