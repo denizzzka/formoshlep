@@ -4,15 +4,6 @@ import dlangui.graphics.drawbuf;
 
 package:
 
-ImageDrawBuf loadImageFromStream(immutable ubyte[] stream, string filename)
-{
-    import dlangui.graphics.images: origLoad = loadImageFromStream;
-
-    ColorDrawBuf ret = origLoad(stream, filename);
-
-    return new ImageDrawBuf(filename, ret);
-}
-
 class ImageDrawBuf : ColorDrawBuf
 {
     private static string[string] availableImages;

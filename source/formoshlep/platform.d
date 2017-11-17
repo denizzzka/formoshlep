@@ -18,10 +18,25 @@ class FormoshlepPlatform : Platform
 
     void handleRequest(HTTPServerRequest req, HTTPServerResponse res)
     {
-        if (req.path == "/res")
+        import std.string : startsWith, endsWith;
+
+        string pics_path = "/res/@embedded@/";
+
+        if (req.path.startsWith(pics_path))
         {
-            // TODO: check URL and return picture from path dlangui/views/res
-            res.writeBody("Pictures output");
+            // TODO: check URL for aviability for current user
+
+            if(req.path.endsWith(".png"))
+            {
+                import std.file;
+
+                auto file = cast(ubyte[]) read("../dlangui/views/res/mdpi/"~req.path[pics_path.length .. $]);
+                res.writeBody(file, "image/png");
+            }
+            else
+            {
+                res.writeBody("Unknown format, error 500");
+            }
         }
         else if (req.path != "/")
             res.writeBody("Unknown path");
