@@ -109,6 +109,17 @@ import dlangui.widgets.controls: ImageWidget;
     return tags.img(attrs.src="/res/"~drawableCache._idToDrawableMap[w.drawableId]._filename, attrs.width=d.width, attrs.height=d.height);
 }
 
+
+import dlangui.widgets.controls: ImageTextButton;
+@method HtmlFragment _toHtml(ImageTextButton w)
+{
+    return
+        tags.button
+        (
+            (cast(LinearLayout) w)._toHtml
+        );
+}
+
 import dlangui.widgets.layouts: LinearLayout, Orientation;
 @method HtmlFragment _toHtml(LinearLayout w)
 {

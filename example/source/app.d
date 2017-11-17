@@ -43,7 +43,7 @@ extern (C) int UIAppMain(string[] args)
     hl1.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     auto log_line_input = new EditLine("INPUT_1", "input log record here"d);
     hl1.addChild = log_line_input;
-    hl1.addChild = new Button("BUTTON_SUBMIT_0", "BUTTON_RESOURCE_ID_0");
+    hl1.addChild = new ImageTextButton("BUTTON_SUBMIT_0", "dlangui-logo1", "BUTTON_RESOURCE_ID_0");
     hl1.childById("BUTTON_SUBMIT_0").textColor("green").fontSize(16).fontWeight(800).fontFace("Courier");
 
     hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
