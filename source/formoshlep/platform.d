@@ -28,10 +28,15 @@ class FormoshlepPlatform : Platform
 
             if(req.path.endsWith(".png"))
             {
-                import std.file;
+                auto embedded = embeddedResourceList.find(req.path[pics_path.length .. $]);
 
-                auto file = cast(ubyte[]) read("../dlangui/views/res/mdpi/"~req.path[pics_path.length .. $]);
-                res.writeBody(file, "image/png");
+                if(embedded is null)
+                {
+                    res.writeBody("Unknown resource");
+                    res.statusCode = 500;
+                }
+                else
+                    res.writeBody(embedded.data, "image/png");
             }
             else
             {
@@ -39,7 +44,10 @@ class FormoshlepPlatform : Platform
             }
         }
         else if (req.path != "/")
+        {
             res.writeBody("Unknown path");
+            res.statusCode = 500;
+        }
         else
         {
             assert(window !is null);
