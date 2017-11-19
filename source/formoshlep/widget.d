@@ -83,11 +83,7 @@ import dlangui.widgets.editors: EditLine;
 import dlangui.widgets.controls: CheckBox;
 @method void _readState(CheckBox w, HTTPServerRequest req)
 {
-    if(req.form.get(w.id) !is null)
-    {
-        w.checked = (req.form.get(w.id) == w.id);
-        assert(w.checked == true);
-    }
+    w.checked = (req.form.get(w.id) == w.id);
 }
 @method HtmlFragment _toHtml(CheckBox w)
 {
@@ -140,10 +136,11 @@ import dlangui.widgets.controls: ImageWidget;
 }
 
 import dlangui.widgets.controls: ImageTextButton;
-@method FormoEvent[] _getEvents(ImageTextButton w, HTTPServerRequest req)
-{
-    return checkIfButtonPressed(w, req);
-}
+// FIXME: sets uncheck to checkbox
+//~ @method FormoEvent[] _getEvents(ImageTextButton w, HTTPServerRequest req)
+//~ {
+    //~ return checkIfButtonPressed(w, req);
+//~ }
 @method HtmlFragment _toHtml(ImageTextButton w)
 {
     return
