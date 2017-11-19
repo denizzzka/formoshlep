@@ -99,7 +99,7 @@ import dlangui.widgets.controls: CheckBox;
         tags.div(attrs.style="width: auto; float: left")
         (
             cbox,
-            tags.label(attrs.for_=w.id)(w.text.to!string~" w.checked="~w.checked.to!string)
+            tags.label(attrs.for_=w.id)(w.text.to!string)
         );
 }
 
