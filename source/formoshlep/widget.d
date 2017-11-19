@@ -85,6 +85,7 @@ import dlangui.widgets.controls: CheckBox;
 {
     w.checked = (req.form.get(w.id) == w.id);
 }
+@method FormoEvent[] _getEvents(CheckBox w, HTTPServerRequest req){ return null; }
 @method HtmlFragment _toHtml(CheckBox w)
 {
     import dhtags.attrs.attribute: HtmlAttribute;
@@ -136,11 +137,10 @@ import dlangui.widgets.controls: ImageWidget;
 }
 
 import dlangui.widgets.controls: ImageTextButton;
-// FIXME: sets uncheck to checkbox
-//~ @method FormoEvent[] _getEvents(ImageTextButton w, HTTPServerRequest req)
-//~ {
-    //~ return checkIfButtonPressed(w, req);
-//~ }
+@method FormoEvent[] _getEvents(ImageTextButton w, HTTPServerRequest req)
+{
+    return checkIfButtonPressed(w, req);
+}
 @method HtmlFragment _toHtml(ImageTextButton w)
 {
     return
