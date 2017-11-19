@@ -83,26 +83,31 @@ import dlangui.widgets.editors: EditLine;
 import dlangui.widgets.controls: CheckBox;
 @method void _readState(CheckBox w, HTTPServerRequest req)
 {
-    w.checked = req.form.get(w.id) == w.id;
+    if(req.form.get(w.id) !is null)
+    {
+        w.checked = (req.form.get(w.id) == w.id);
+        assert(w.checked == true);
+    }
 }
 @method HtmlFragment _toHtml(CheckBox w)
 {
+    import dhtags.attrs.attribute: HtmlAttribute;
+
+    auto cbox = tags.input(attrs.type="checkbox", attrs.id=w.id, attrs.name=w.id, attrs.value=w.id);
+
+    if(w.checked)
+        cbox.attrs ~= HtmlAttribute("checked", "checked");
+
     return
-        tags.div(attrs.value="что подставить?")
+        tags.div(attrs.style="width: auto; float: left")
         (
-            !w.checked
-                ? tags.input(attrs.type="checkbox", attrs.name=w.id, attrs.value=w.id)
-                : tags.input(attrs.type="checkbox", attrs.name=w.id, attrs.value=w.id, attrs.checked=(w.checked ? "checked" : "unchecked")),
-            tags.label(w.text.to!string)
+            cbox,
+            tags.label(attrs.for_=w.id)(w.text.to!string~" w.checked="~w.checked.to!string)
         );
 }
 
 import dlangui.widgets.controls: Button;
-@method HtmlFragment _toHtml(Button w)
-{
-    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
-}
-@method FormoEvent[] _getEvents(Button w, HTTPServerRequest req)
+private FormoEvent[] checkIfButtonPressed(Widget w, HTTPServerRequest req)
 {
     if(req.form.get(w.id) is null)
         return null;
@@ -112,6 +117,14 @@ import dlangui.widgets.controls: Button;
             FormoEvent(null, new MouseEvent(MouseAction.ButtonDown, MouseButton.Left, 0, -10, -10, 0)),
             FormoEvent(null, new MouseEvent(MouseAction.ButtonUp,   MouseButton.Left, 0, -10, -10, 0))
         ];
+}
+@method FormoEvent[] _getEvents(Button w, HTTPServerRequest req)
+{
+    return checkIfButtonPressed(w, req);
+}
+@method HtmlFragment _toHtml(Button w)
+{
+    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
 }
 
 import dlangui.widgets.controls: ImageWidget;
@@ -126,12 +139,15 @@ import dlangui.widgets.controls: ImageWidget;
     return tags.img(attrs.src="/res/"~drawableCache._idToDrawableMap[w.drawableId]._filename, attrs.width=d.width, attrs.height=d.height);
 }
 
-
 import dlangui.widgets.controls: ImageTextButton;
+@method FormoEvent[] _getEvents(ImageTextButton w, HTTPServerRequest req)
+{
+    return checkIfButtonPressed(w, req);
+}
 @method HtmlFragment _toHtml(ImageTextButton w)
 {
     return
-        tags.button
+        tags.button(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string)
         (
             (cast(LinearLayout) w)._toHtml
         );

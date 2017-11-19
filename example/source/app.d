@@ -60,6 +60,12 @@ extern (C) int UIAppMain(string[] args)
             log_text.text = log_text.text ~ log_line_input.text ~ ' ';
             return true;
         };
+    hl1.childById("BUTTON_SUBMIT_0").click =
+        delegate(Widget w)
+        {
+            log_text.text = log_text.text ~ "image button pressed" ~ ' ';
+            return true;
+        };
 
     vl3.addChild = btn0;
     vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
