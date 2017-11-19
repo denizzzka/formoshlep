@@ -80,6 +80,23 @@ import dlangui.widgets.editors: EditLine;
     return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
 }
 
+import dlangui.widgets.controls: CheckBox;
+@method void _readState(CheckBox w, HTTPServerRequest req)
+{
+    w.checked = req.form.get(w.id) == w.id;
+}
+@method HtmlFragment _toHtml(CheckBox w)
+{
+    return
+        tags.div(attrs.value="что подставить?")
+        (
+            !w.checked
+                ? tags.input(attrs.type="checkbox", attrs.name=w.id, attrs.value=w.id)
+                : tags.input(attrs.type="checkbox", attrs.name=w.id, attrs.value=w.id, attrs.checked=(w.checked ? "checked" : "unchecked")),
+            tags.label(w.text.to!string)
+        );
+}
+
 import dlangui.widgets.controls: Button;
 @method HtmlFragment _toHtml(Button w)
 {
