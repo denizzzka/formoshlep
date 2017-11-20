@@ -115,12 +115,20 @@ import dlangui.widgets.controls: RadioButton;
 @method FormoEvent[] _getEvents(RadioButton w, HTTPServerRequest req){ return null; }
 @method HtmlFragment _toHtml(RadioButton w)
 {
+    import dhtags.attrs.attribute: HtmlAttribute;
+
+    auto box = tags.input(attrs.type="radio", attrs.id=w.id, attrs.name=w.parent.id, attrs.value=w.id);
+
+    if(w.checked)
+        box.attrs ~= HtmlAttribute("checked", "checked");
+
+    if(!w.enabled)
+        box.attrs ~= HtmlAttribute("disabled", "disabled");
+
     return
         tags.div(attrs.style="width: auto; float: left")
         (
-            !w.checked
-            ? tags.input(attrs.type="radio", attrs.id=w.id, attrs.name=w.parent.id, attrs.value=w.id)
-            : tags.input(attrs.type="radio", attrs.id=w.id, attrs.name=w.parent.id, attrs.value=w.id, attrs.checked="checked"),
+            box,
             tags.label(attrs.for_=w.id)(w.text.to!string)
         );
 }
