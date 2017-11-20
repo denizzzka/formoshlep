@@ -72,6 +72,11 @@ extern (C) int UIAppMain(string[] args)
 
     window.mainWidget.addChild = log_text;
     vl3.addChild = new ImageWidget("Computer", "computer");
+    auto rbts = new GroupBox("radiobuttons", "RadioButton"d);
+    rbts.addChild = new RadioButton("rb1", "RadioButton 1"d).checked(true);
+    rbts.addChild(new RadioButton("rb2", "RadioButton 2"d));
+    rbts.addChild(new RadioButton("rb3", "RadioButton disabled"d).enabled(false));
+    hl1.addChild = rbts;
 
     window.show();
 

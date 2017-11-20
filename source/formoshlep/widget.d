@@ -103,6 +103,28 @@ import dlangui.widgets.controls: CheckBox;
         );
 }
 
+import dlangui.widgets.controls: RadioButton;
+@method void _readState(RadioButton w, HTTPServerRequest req)
+{
+    if(w.checked != (req.form.get(w.parent.id) == w.id))
+    {
+        w.uncheckSiblings();
+        w.checked = true;
+    }
+}
+@method FormoEvent[] _getEvents(RadioButton w, HTTPServerRequest req){ return null; }
+@method HtmlFragment _toHtml(RadioButton w)
+{
+    return
+        tags.div(attrs.style="width: auto; float: left")
+        (
+            !w.checked
+            ? tags.input(attrs.type="radio", attrs.id=w.id, attrs.name=w.parent.id, attrs.value=w.id)
+            : tags.input(attrs.type="radio", attrs.id=w.id, attrs.name=w.parent.id, attrs.value=w.id, attrs.checked="checked"),
+            tags.label(attrs.for_=w.id)(w.text.to!string)
+        );
+}
+
 import dlangui.widgets.controls: Button;
 private FormoEvent[] checkIfButtonPressed(Widget w, HTTPServerRequest req)
 {
