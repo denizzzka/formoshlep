@@ -189,28 +189,34 @@ import dlangui.widgets.controls: ImageTextButton;
 import dlangui.widgets.layouts: LinearLayout, Orientation;
 @method HtmlFragment _toHtml(LinearLayout w)
 {
+    HtmlFragment[] sub;
+
     final switch(w.orientation)
     {
         case Orientation.Horizontal:
-            string ret;
-
             for(auto i = 0; i < w.childCount; i++)
-                ret ~= w.child(i).toHtml.toString(false);
+                sub ~= w.child(i).toHtml;
 
-            return tags.div(attrs.style="width: auto; float: left")(ret);
+            if(sub.length)
+                return tags.div(attrs.style="width: auto; float: left")(sub);
+
+            break;
 
         case Orientation.Vertical:
-            string ret;
-
             for(auto i = 0; i < w.childCount; i++)
-                ret ~=
+                sub ~=
                     tags.div(attrs.style="clear: both")
                     (
                         w.child(i).toHtml
-                    ).toString(false);
+                    );
 
-            return tags.div(attrs.style="float: left")(ret);
+            if(sub.length)
+                return tags.div(attrs.style="float: left")(sub);
+
+            break;
     }
+
+    return new HtmlTag;
 }
 
 import dlangui.widgets.groupbox: GroupBox;
@@ -219,7 +225,7 @@ import dlangui.widgets.groupbox: GroupBox;
     return
         tags.fieldset
         (
-            tags.legend(w.text),
+            tags.legend(w.text.to!string),
             (cast(LinearLayout) w)._toHtml
         ).addStyle(w);
 }

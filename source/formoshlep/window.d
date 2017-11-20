@@ -6,6 +6,11 @@ class FormoshlepWindow : Window
 {
     private dstring caption;
 
+    debug
+        enum PRETTY_HTML_FORMAT = true;
+    else
+        enum PRETTY_HTML_FORMAT = false;
+
     this(dstring caption)
     {
         this.caption = caption;
@@ -31,7 +36,13 @@ class FormoshlepWindow : Window
 
     package void genHttpServerResponse(ref HTTPServerResponse res)
     {
-        res.writeBody(toHtml.toString(false), "text/html; charset=UTF-8");
+        res.writeBody
+        (
+            PRETTY_HTML_FORMAT
+                ? toHtml.toPrettyString(false)
+                : toHtml.toString(false),
+            "text/html; charset=UTF-8"
+        );
     }
 
     import dhtags.tags.tag: HtmlFragment, HtmlString;
@@ -58,7 +69,7 @@ class FormoshlepWindow : Window
                 (
                     tags.form(enctype="multipart/form-data", action=".", method="post")
                     (
-                        mainWidgetToHtml.toString(false)
+                        mainWidgetToHtml()
                     )
                 )
             );
