@@ -83,7 +83,7 @@ import dlangui.widgets.editors: EditLine;
 }
 @method HtmlFragment _toHtml(EditLine w)
 {
-    return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
+    return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.controls: CheckBox;
@@ -101,14 +101,11 @@ import dlangui.widgets.controls: CheckBox;
     if(w.checked)
         cbox.attrs ~= HtmlAttribute("checked", "checked");
 
-    if(!w.enabled)
-        cbox.attrs ~= HtmlAttribute("disabled", "disabled");
-
     return
         tags.div(attrs.style="width: auto; float: left")
         (
-            cbox,
-            tags.label(attrs.for_=w.id)(w.text.to!string)
+            cbox.addStyle(w),
+            tags.label(attrs.for_=w.id)(w.text.to!string).addStyle(w)
         );
 }
 
@@ -137,8 +134,8 @@ import dlangui.widgets.controls: RadioButton;
     return
         tags.div(attrs.style="width: auto; float: left")
         (
-            box,
-            tags.label(attrs.for_=w.id)(w.text.to!string)
+            box.addStyle(w),
+            tags.label(attrs.for_=w.id)(w.text.to!string).addStyle(w)
         );
 }
 
@@ -160,7 +157,7 @@ private FormoEvent[] checkIfButtonPressed(Widget w, HTTPServerRequest req)
 }
 @method HtmlFragment _toHtml(Button w)
 {
-    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string, attrs.style=w.styleStr);
+    return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.controls: ImageWidget;
@@ -186,7 +183,7 @@ import dlangui.widgets.controls: ImageTextButton;
         tags.button(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string)
         (
             (cast(LinearLayout) w)._toHtml
-        );
+        ).addStyle(w);
 }
 
 import dlangui.widgets.layouts: LinearLayout, Orientation;
@@ -242,6 +239,9 @@ HtmlTag addStyle(HtmlTag tag, Widget w)
     import dhtags.attrs.attribute: HtmlAttribute;
 
     tag.attrs ~= HtmlAttribute("style", w.styleStr);
+
+    if(!w.enabled)
+        tag.attrs ~= HtmlAttribute("disabled", "disabled");
 
     return tag;
 }

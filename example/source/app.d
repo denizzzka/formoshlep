@@ -43,6 +43,7 @@ extern (C) int UIAppMain(string[] args)
     hl1.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     auto log_line_input = new EditLine("INPUT_1", "input log record here"d);
     hl1.addChild = log_line_input;
+    hl1.addChild = (new ImageTextButton("BUTTON_SUBMIT_disabled", "dlangui-logo1", "BUTTON_DISABLED")).enabled(false);
     hl1.addChild = new ImageTextButton("BUTTON_SUBMIT_0", "dlangui-logo1", "BUTTON_RESOURCE_ID_0");
     hl1.childById("BUTTON_SUBMIT_0").textColor("green").fontSize(16).fontWeight(800).fontFace("Courier");
     hl1.addChild = new CheckBox("CHECK_BOX_0", "Some check box");
@@ -50,7 +51,7 @@ extern (C) int UIAppMain(string[] args)
 
     hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
     hl2.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
-    hl2.addChild = new EditLine("INPUT_2", "initial text 2"d);
+    hl2.addChild = (new EditLine("INPUT_2", "initial text 2"d)).enabled(false);
     hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
 
     auto log_text = new TextWidget("SOME_TEXT", "This is text too"d);
@@ -69,7 +70,7 @@ extern (C) int UIAppMain(string[] args)
         };
 
     vl3.addChild = btn0;
-    vl3.addChild = new Button("SOME_BUTTON_1", "Some button 1");
+    vl3.addChild = (new Button("SOME_BUTTON_1", "Some button 1")).enabled(false);
 
     window.mainWidget.addChild = log_text;
     vl3.addChild = new ImageWidget("Computer", "computer");
