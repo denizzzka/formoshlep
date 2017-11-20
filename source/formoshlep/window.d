@@ -62,6 +62,10 @@ class FormoshlepWindow : Window
                     tags.title
                     (
                         windowCaption().to!string
+                    ),
+                    tags.style(type="text/css")
+                    (
+                        ".w100 {width: 100%}"
                     )
                 ),
 

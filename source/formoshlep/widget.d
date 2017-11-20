@@ -2,7 +2,7 @@ module formoshlep.widget;
 
 import tags = dhtags.tags;
 import attrs = dhtags.attrs;
-import dhtags.tags.tag: HtmlFragment, HtmlString;
+import dhtags.tags.tag: HtmlFragment, HtmlString, HtmlAttribute;
 import vibe.http.server: HTTPServerRequest;
 import std.conv: to;
 import dlangui.core.events;
@@ -204,11 +204,17 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
 
         case Orientation.Vertical:
             for(auto i = 0; i < w.childCount; i++)
+            {
+                // FIXME: dangerous cast - need to change toHtml result type!
+                auto width_100 = cast(HtmlTag) w.child(i).toHtml;
+                width_100.attrs ~= HtmlAttribute("class", "w100");
+
                 sub ~=
                     tags.div(attrs.style="clear: both")
                     (
-                        w.child(i).toHtml
+                        width_100
                     );
+            }
 
             if(sub.length)
                 return tags.div(attrs.style="float: left")(sub);
@@ -253,8 +259,6 @@ import dhtags.tags.tag: HtmlTag;
 
 HtmlTag addStyle(HtmlTag tag, Widget w)
 {
-    import dhtags.attrs.attribute: HtmlAttribute;
-
     tag.attrs ~= HtmlAttribute("style", w.styleStr);
 
     if(!w.enabled)
