@@ -101,6 +101,9 @@ import dlangui.widgets.controls: CheckBox;
     if(w.checked)
         cbox.attrs ~= HtmlAttribute("checked", "checked");
 
+    if(!w.enabled)
+        cbox.attrs ~= HtmlAttribute("disabled", "disabled");
+
     return
         tags.div(attrs.style="width: auto; float: left")
         (

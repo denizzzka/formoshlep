@@ -46,6 +46,7 @@ extern (C) int UIAppMain(string[] args)
     hl1.addChild = new ImageTextButton("BUTTON_SUBMIT_0", "dlangui-logo1", "BUTTON_RESOURCE_ID_0");
     hl1.childById("BUTTON_SUBMIT_0").textColor("green").fontSize(16).fontWeight(800).fontFace("Courier");
     hl1.addChild = new CheckBox("CHECK_BOX_0", "Some check box");
+    hl1.addChild = new CheckBox("CHECK_BOX_1", "Some disabled check box").enabled(false);
 
     hl2.addChild = new Button("BUTTON_SUBMIT_1", "BUTTON_RESOURCE_ID_1");
     hl2.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
