@@ -54,6 +54,8 @@ extern (C) int UIAppMain(string[] args)
     hl2.addChild = new TextWidget("HELLO_WORLD", "Hello, World!"d);
     hl2.addChild = (new EditLine("INPUT_2", "initial text 2"d)).enabled(false);
     hl2.addChild = new Button("BUTTON_SUBMIT_2", "BUTTON_RESOURCE_ID_2");
+    hl2.addChild = new ComboBox("combo0", ["value 1"d, "value 2"d, "value 3"d]);
+    hl2.addChild = (new ComboBox("combo1", ["value 1"d, "value 2"d, "value 3"d])).selectedItemIndex(1);
 
     auto log_text = new TextWidget("SOME_TEXT", "This is text too"d);
     auto btn0 = new Button("SOME_BUTTON_0", "Press for add log line");

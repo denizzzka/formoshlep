@@ -160,6 +160,45 @@ private FormoEvent[] checkIfButtonPressed(Widget w, HTTPServerRequest req)
     return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 
+import dlangui.widgets.combobox: ComboBox;
+@method void _readState(ComboBox w, HTTPServerRequest req)
+{
+    import dlangui;
+    Log.d(__FUNCTION__);
+    auto r = req.form.get(w.id);
+
+    if(r !is null)
+    {
+        auto i = r.to!int;
+
+        if(i >= 0 && i < w.items.length)
+            w.selectedItemIndex = i;
+
+        Log.d(i);
+    }
+}
+@method HtmlTag _toHtml(ComboBox w)
+{
+    HtmlTag[] opts;
+    //~ opts ~= tags.option(attrs.disabled="disabled", attrs.value="unselected");
+
+    for(auto i = 0; i < w.items.length; i++)
+    {
+        opts ~= tags.option(attrs.value=i.to!string)(w.items.get(i).to!string);
+
+        if(i == w.selectedItemIndex)
+            opts[$-1].attrs ~= HtmlAttribute("selected", "selected");
+    }
+
+    return
+        tags.select(attrs.name=w.id)
+        (
+            w.items.length
+                ? opts
+                : [ new HtmlTag ]
+        );
+}
+
 import dlangui.widgets.controls: ImageWidget;
 @method HtmlTag _toHtml(ImageWidget w)
 {
