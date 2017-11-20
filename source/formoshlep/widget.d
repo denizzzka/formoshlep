@@ -225,7 +225,7 @@ import dlangui.widgets.groupbox: GroupBox;
     return
         tags.fieldset
         (
-            tags.legend(w.text),
+            tags.legend(w.text.to!string),
             (cast(LinearLayout) w)._toHtml
         ).addStyle(w);
 }
