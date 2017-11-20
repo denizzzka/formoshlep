@@ -163,8 +163,6 @@ private FormoEvent[] checkIfButtonPressed(Widget w, HTTPServerRequest req)
 import dlangui.widgets.combobox: ComboBox;
 @method void _readState(ComboBox w, HTTPServerRequest req)
 {
-    import dlangui;
-    Log.d(__FUNCTION__);
     auto r = req.form.get(w.id);
 
     if(r !is null)
@@ -173,8 +171,6 @@ import dlangui.widgets.combobox: ComboBox;
 
         if(i >= 0 && i < w.items.length)
             w.selectedItemIndex = i;
-
-        Log.d(i);
     }
 }
 @method HtmlTag _toHtml(ComboBox w)
