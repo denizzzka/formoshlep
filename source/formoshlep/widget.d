@@ -213,6 +213,17 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
     }
 }
 
+import dlangui.widgets.groupbox: GroupBox;
+@method HtmlFragment _toHtml(GroupBox w)
+{
+    return
+        tags.fieldset
+        (
+            tags.legend(w.text),
+            (cast(LinearLayout) w)._toHtml
+        ).addStyle(w);
+}
+
 private:
 
 static this()
