@@ -80,6 +80,9 @@ extern (C) int UIAppMain(string[] args)
     rbts.addChild(new RadioButton("rb3", "RadioButton disabled"d).enabled(false));
     hl1.addChild = rbts;
 
+    hl1.addChild = (new SliderWidget("sb2", Orientation.Horizontal));
+    hl1.addChild = (new SliderWidget("sb3", Orientation.Vertical)).enabled(false);
+
     window.show();
 
     return Platform.instance.enterMessageLoop();

@@ -224,6 +224,13 @@ import dlangui.widgets.groupbox: GroupBox;
         ).addStyle(w);
 }
 
+import dlangui.widgets.scrollbar: SliderWidget;
+@method HtmlFragment _toHtml(SliderWidget w)
+{
+    return
+        tags.input(attrs.type="range", attrs.id = w.id).addStyle(w);
+}
+
 private:
 
 static this()
