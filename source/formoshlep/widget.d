@@ -24,6 +24,9 @@ HtmlFragment toHtml(virtual!Widget);
 
 void readWidgetsState(Widget w, HTTPServerRequest req)
 {
+    if(!w.enabled)
+        return;
+
     w.readState(req);
 
     for(auto i = 0; i < w.childCount; i++)
@@ -32,6 +35,9 @@ void readWidgetsState(Widget w, HTTPServerRequest req)
 
 void processEvents(Widget w, HTTPServerRequest req)
 {
+    if(!w.enabled)
+        return;
+
     FormoEvent[] events = w.getEvents(req);
 
     foreach(e; events)
