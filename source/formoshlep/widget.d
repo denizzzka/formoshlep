@@ -2,7 +2,7 @@ module formoshlep.widget;
 
 import tags = dhtags.tags;
 import attrs = dhtags.attrs;
-import dhtags.tags.tag: HtmlFragment, HtmlString, HtmlAttribute;
+import dhtags.tags.tag: HtmlTag, HtmlString, HtmlAttribute;
 import vibe.http.server: HTTPServerRequest;
 import std.conv: to;
 import dlangui.core.events;
@@ -20,7 +20,7 @@ struct FormoEvent
 // Custom Widget methods:
 void readState(virtual!Widget, HTTPServerRequest);
 FormoEvent[] getEvents(virtual!Widget, HTTPServerRequest);
-HtmlFragment toHtml(virtual!Widget);
+HtmlTag toHtml(virtual!Widget);
 
 void readWidgetsState(Widget w, HTTPServerRequest req)
 {
@@ -59,10 +59,10 @@ public:
 import dlangui.widgets.widget: Widget;
 @method void _readState(Widget w, HTTPServerRequest req) {}
 @method FormoEvent[] _getEvents(Widget w, HTTPServerRequest req) { return null; }
-@method HtmlFragment _toHtml(Widget w) { assert(false, "HTML output isn't implemented"); }
+@method HtmlTag _toHtml(Widget w) { assert(false, "HTML output isn't implemented"); }
 
 import dlangui.widgets.controls: TextWidget;
-@method HtmlFragment _toHtml(TextWidget w)
+@method HtmlTag _toHtml(TextWidget w)
 {
     return tags.span(w.text.to!string).addStyle(w);
 }
@@ -81,7 +81,7 @@ import dlangui.widgets.editors: EditLine;
 
     return null;
 }
-@method HtmlFragment _toHtml(EditLine w)
+@method HtmlTag _toHtml(EditLine w)
 {
     return tags.input(attrs.type="text", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
@@ -92,7 +92,7 @@ import dlangui.widgets.controls: CheckBox;
     w.checked = (req.form.get(w.id) == w.id);
 }
 @method FormoEvent[] _getEvents(CheckBox w, HTTPServerRequest req){ return null; }
-@method HtmlFragment _toHtml(CheckBox w)
+@method HtmlTag _toHtml(CheckBox w)
 {
     import dhtags.attrs.attribute: HtmlAttribute;
 
@@ -119,7 +119,7 @@ import dlangui.widgets.controls: RadioButton;
     }
 }
 @method FormoEvent[] _getEvents(RadioButton w, HTTPServerRequest req){ return null; }
-@method HtmlFragment _toHtml(RadioButton w)
+@method HtmlTag _toHtml(RadioButton w)
 {
     import dhtags.attrs.attribute: HtmlAttribute;
 
@@ -155,13 +155,13 @@ private FormoEvent[] checkIfButtonPressed(Widget w, HTTPServerRequest req)
 {
     return checkIfButtonPressed(w, req);
 }
-@method HtmlFragment _toHtml(Button w)
+@method HtmlTag _toHtml(Button w)
 {
     return tags.input(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string).addStyle(w);
 }
 
 import dlangui.widgets.controls: ImageWidget;
-@method HtmlFragment _toHtml(ImageWidget w)
+@method HtmlTag _toHtml(ImageWidget w)
 {
     assert(w.drawable !is null);
 
@@ -177,7 +177,7 @@ import dlangui.widgets.controls: ImageTextButton;
 {
     return checkIfButtonPressed(w, req);
 }
-@method HtmlFragment _toHtml(ImageTextButton w)
+@method HtmlTag _toHtml(ImageTextButton w)
 {
     return
         tags.button(attrs.type="submit", attrs.name=w.id, attrs.value=w.text.to!string)
@@ -187,9 +187,9 @@ import dlangui.widgets.controls: ImageTextButton;
 }
 
 import dlangui.widgets.layouts: LinearLayout, Orientation;
-@method HtmlFragment _toHtml(LinearLayout w)
+@method HtmlTag _toHtml(LinearLayout w)
 {
-    HtmlFragment[] sub;
+    HtmlTag[] sub;
 
     final switch(w.orientation)
     {
@@ -205,8 +205,7 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
         case Orientation.Vertical:
             for(auto i = 0; i < w.childCount; i++)
             {
-                // FIXME: dangerous cast - need to change toHtml result type!
-                auto width_100 = cast(HtmlTag) w.child(i).toHtml;
+                auto width_100 = w.child(i).toHtml;
                 width_100.attrs ~= HtmlAttribute("class", "w100");
 
                 sub ~=
@@ -226,7 +225,7 @@ import dlangui.widgets.layouts: LinearLayout, Orientation;
 }
 
 import dlangui.widgets.groupbox: GroupBox;
-@method HtmlFragment _toHtml(GroupBox w)
+@method HtmlTag _toHtml(GroupBox w)
 {
     return
         tags.fieldset
@@ -254,8 +253,6 @@ string styleStr(Widget w)
         "font-size: "~s.fontSize.to!string~"px; "~
         "font-weight: "~s.fontWeight.to!string;
 }
-
-import dhtags.tags.tag: HtmlTag;
 
 HtmlTag addStyle(HtmlTag tag, Widget w)
 {
