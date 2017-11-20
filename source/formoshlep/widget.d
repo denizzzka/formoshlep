@@ -230,12 +230,14 @@ import dlangui.widgets.groupbox: GroupBox;
         ).addStyle(w);
 }
 
-import dlangui.widgets.scrollbar: SliderWidget;
-@method HtmlFragment _toHtml(SliderWidget w)
-{
-    return
-        tags.input(attrs.type="range", attrs.id = w.id).addStyle(w);
-}
+//~ import dlangui.widgets.scrollbar: SliderWidget;
+//~ import dlangui.widgets.widget: WidgetGroup;
+//~ @method HtmlFragment _toHtml(WidgetGroup w)
+//~ {
+    //~ assert(false);
+    //~ return
+        //~ tags.input(attrs.type="range", attrs.id = w.id).addStyle(w);
+//~ }
 
 private:
 

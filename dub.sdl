@@ -17,6 +17,9 @@ subPackage {
     targetType "executable"
     configuration "dflt" {
 		dependency "formoshlep" version="*"
+
+		#xtc:
+		#debugVersions "explain" "traceCalls"
     }
 
     # FIXME: isn't callable dut to DUB bug?

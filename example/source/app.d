@@ -81,7 +81,7 @@ extern (C) int UIAppMain(string[] args)
     hl1.addChild = rbts;
 
     hl1.addChild = new SliderWidget("sb2", Orientation.Horizontal);
-    hl1.addChild = (new SliderWidget("sb3", Orientation.Vertical)).enabled(false);
+    //~ hl1.addChild = (new SliderWidget("sb3", Orientation.Vertical)).enabled(false);
 
     window.show();
 
