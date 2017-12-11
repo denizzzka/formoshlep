@@ -13,3 +13,11 @@ Briefly: it is need to add `import formoshlep;` line into your code and fill out
 Your existing code should work as usual, but see section "Current state" for current disadvantages.
 
 For more information see `example/`.
+
+## Running example
+```
+$ dub fetch formoshlep
+$ dub run formoshlep:example
+```
+
+Then open http://127.0.0.1:8080/
