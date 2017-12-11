@@ -5,7 +5,7 @@ Vaadin-like dlangui web platform
 This project is in "proof of concept" state.
 Supported only `Button` actions. JavaScript isn't used and isn't need to be enabled in browser.
 
-Currently supported widgets:
+This picture shows currently supported widgets:
 ![Currently supported widgets](screenshot01.png)
 
 ## Usage
